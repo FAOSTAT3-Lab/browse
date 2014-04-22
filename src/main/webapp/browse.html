@@ -1,0 +1,27 @@
+<div class="pageTitleCommands">
+    <h1 id='pageTitle'></h1>
+    <div id='mesType'>
+        <input id='by_domain' type='radio' value='methodology_list' name='radios' onclick='FAOSTATBrowse.loadUI("Q", "*");'>
+        <label id='by_domain_label' for='by_domain'></label>
+        &nbsp;|&nbsp;
+        <input id='area' type='radio' value='classifications' name='radios' onclick='FAOSTATBrowse.loadUI("area", "null");'>
+        <label id='area_label' for='area'></label>
+        &nbsp;|&nbsp;
+        <input id='rankings' type='radio' value='local_currency' name='radios' onclick='FAOSTATBrowse.loadUI("rankings", "null");'>
+        <label id='rankings_label' for='rankings'></label>
+<!--        &nbsp;|&nbsp;
+        <input id='browse_crf' type='radio' value='browse_crf' name='radios' onclick='FAOSTATBrowse.loadUI("crf", "null");'>
+        <label id='browse_crf_label' for='browse_crf'></label>-->
+    </div>
+</div>
+<div id='main-content-leftsidebar'></div>
+
+
+<!-- TODO: change the input ids with proper ones -->
+<script>
+    /**document.getElementById('pageTitle').innerHTML = $.i18n.prop('_browse');
+    document.getElementById('by_domain_label').innerHTML = $.i18n.prop('_by_domain');
+    document.getElementById('area_label').innerHTML = $.i18n.prop('_by_area');
+    document.getElementById('rankings_label').innerHTML = $.i18n.prop('_rankings');
+    document.getElementById('browse_crf_label').innerHTML = $.i18n.prop('_crf');*/
+</script>

@@ -1,0 +1,20 @@
+{
+"default" :
+    {
+        "WIDTH_100" : "724px",
+        "WIDTH_66" : "504px",
+        "WIDTH_50" : "352px",
+        "WIDTH_33" : "200px",
+        "WIDTH_25" : "180px",
+        "WIDTH_20" : "140px"
+    },
+"by_country" :    {
+        "WIDTH_100" : "724px",
+        "WIDTH_66" : "504px",
+        "WIDTH_50" : "352px",
+        "WIDTH_33" : "200px",
+        "WIDTH_25" : "180px",
+        "WIDTH_20" : "140px"
+    }
+}
+

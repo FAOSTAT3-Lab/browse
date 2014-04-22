@@ -1,0 +1,27 @@
+<div class="left-sidebar-browse">
+    <div id='tree-title' class="standard-title"></div>
+    <hr class="standard-hr">
+    <div id='metadata_tree'></div>
+</div>
+
+<div class="right-content-browse">
+    <div id="selectorsHead" class="ultimate-level">
+        <div id='title' class="standard-title"></div>
+        <div id='tabs' class="faostat-browse-tabsHolder"></div>
+        <hr class="standard-hr">
+        <!--<div id='title'></div>-->
+        <div id='subtitle'></div>
+        <div id='selectors'></div>
+        <!--<div class='spacer-one'></div>-->
+        <!--<hr class='standard-hr'>-->
+        <div style="height:10px"></div>
+     </div>
+     <div class="browse-views-holder">
+         <div id='content'></div>
+         <div id='footnote' class="faostat-browse-footnote">Food and Agriculture Organisation (FAO) analysis based on IEA Statistics © OECD/IEA, 2013 for energy used in the fisheries sector and on UNdata, 2013 for consumption of other energy carriers in agriculture.</div>
+     </div>
+ </div>
+
+ <script>
+     document.getElementById('tree-title').innerHTML = $.i18n.prop('_faostatDomains');
+ </script>

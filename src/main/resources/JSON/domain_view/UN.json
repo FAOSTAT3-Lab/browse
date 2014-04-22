@@ -1,0 +1,231 @@
+{
+    version : "1.0",
+    css : "faostat",
+    view_id : "UN",
+    date_last_update : "2013-03-13",
+    user : "Guido",
+    abstract : {
+        E_title : null,
+        E_subtitle : "<a href='$_NOTES_URL/ghg-notes/AgricultureTotal.pdf' target='_black'><div class='title-note-icon icon-info'></div><div class='title-note'>Emissions of methane and nitrous oxide produced from agricultural activities</div></a>",
+        S_subtitle : "<a href='$_NOTES_URL/ghg-notes/AgricultureTotal.pdf' target='_black'><div class='title-note-icon icon-info'></div><div class='title-note'>Emisiones de metano y óxido nitroso producido por las actividades agrícolas</div></a>",
+        F_subtitle : "<a href='$_NOTES_URL/ghg-notes/AgricultureTotal.pdf' target='_black'><div class='title-note-icon icon-info'></div><div class='title-note'>Émissions de méthane et d'oxyde nitreux provenant des activités agricoles</div></a>"
+    },
+    selectors : [
+        {
+            type : "dropdown",
+            E_label : "Items",
+            F_label : "Articles",
+            S_label : "Ítems",
+            E_help : "Items are...",
+            F_help : "Items are...",
+            S_help : "Items are...",
+            keyword : "item",
+            default_code : "6798",
+            blacklist : [],
+            start_date : null,
+            end_date : null,
+            default_date : null,
+            width: "$_WIDTH_25",
+            sql : {
+                selects : [
+                    {aggregation : "NONE", column : "I.ItemCode", alias : "Code"},
+                    {aggregation : "NONE", column : "I.ItemName_$LANG", alias : "Name"}
+                ],
+                froms : [
+                    {column : "Item", alias : "I"},
+                    {column : "DomainItem", alias : "DI"}
+                ],
+                wheres : [
+                    {datatype : "TEXT", column : "DI.DomainCode", operator : "=", value : "GE", ins : []},
+                    {datatype : "DATE", column : "DI.ItemCode", operator : "=", value : "I.ItemCode", ins : []}
+                ],
+                orderBys : [
+                    {column : "DI.ord", direction : "ASC"},
+                    {column : "I.ItemName_$LANG", direction : "ASC"}
+                ],
+                limit : null,
+                query : null,
+                frequency : null
+            }
+        },
+        {
+            type : "dropdown",
+            E_label : "Areas",
+            E_help : "n.a.",
+            keyword : "area",
+            width: "$_WIDTH_25",
+            "sql" : {
+                "query" : "SELECT DISTINCT A.AreaCode AS Code, A.AreaName_$LANG AS Name FROM DomainAreaList AS DA, Area AS A  WHERE DA.DomainCode = 'GE' AND (A.AreaCode = DA.AreaCode ) ORDER BY A.AreaName_$LANG ASC"
+            },
+            default_code : "5000",
+            blacklist : [],
+            start_date : null,
+            end_date : null,
+            default_date : null
+        },
+        {
+            type : "dropdown_year",
+            E_label : "From Year",
+            F_label : "Depuis l'année",
+            S_label : "Desde el Año",
+            E_help : "n.a.",
+            keyword : "fromyear",
+            default_code : 1990,
+            blacklist : [],
+            start_date : null,
+            end_date : null,
+            default_date : null,
+            width: "$_WIDTH_20",
+            sql : {
+                selects : [
+                    {aggregation : "NONE", column : "D.StartYear", alias : "StartYear"},
+                    {aggregation : "NONE", column : "D.EndYear", alias : "EndYear"
+                    }
+                ],
+                froms : [
+                    {column : "Domain", alias : "D"}
+                ],
+                wheres : [
+                    {datatype : "TEXT", column : "D.DomainCode", operator : "=", value : "GE", ins : []}
+                ],
+                limit : null,
+                query : null,
+                frequency : null
+            }
+        },
+        {
+            type : "dropdown_year",
+            E_label : "To Year",
+            F_label : "A l’année",
+            S_label : "Hasta el año",
+            E_help : "n.a.",
+            keyword : "toyear",
+            default_code : 2011,
+            blacklist : [],
+            start_date : null,
+            end_date : null,
+            default_date : null,
+            width: "$_WIDTH_20",
+            sql : {
+                selects : [
+                    {aggregation : "NONE", column : "D.StartYear", alias : "StartYear"},
+                    {aggregation : "NONE", column : "D.EndYear", alias : "EndYear"}
+                ],
+                froms : [
+                    {column : "Domain", alias : "D"}
+                ],
+                wheres : [
+                    {datatype : "TEXT", column : "D.DomainCode", operator : "=", value : "GE", ins : []}
+                ],
+                limit : null,
+                query : null,
+                frequency : null
+            }
+        },
+        {
+            type : "dropdown_aggregation",
+            E_label : "Aggregation",
+            E_help : "n.a.",
+            rest : "/faostat-browse-dbms/rest/nosql/get/aggregation",
+            keyword : "aggregation",
+            default_code : "AVG",
+            E_default_label : "Average",
+            width: "$_WIDTH_20"
+        }
+
+    ],
+    objects : [
+        {
+            "type" : "chart",
+            "datasource" : "faostat",
+            "css" : "faostat",
+            "height" : "300px",
+            "width" : "$_WIDTH_100",
+            "item_onchange" : true,
+            "element_onchange" : true,
+            "area_onchange" : true,
+            "year_onchange" : false,
+            "aggregation_onchange" : false,
+            "orderby_onchange" : true,
+            "E_title" : "Top 10 Commodities",
+            "S_title" : "10 principales Productos",
+            "F_title" : "Top 10 Produits",
+            "subtitle" : "",
+            "date_default_label" : "Baseline 2005-2007/2030/2050",
+            "E_footnote" : null,
+            "object_parameters" : {
+                "series_name" : "Production",
+                "engine" : "highcharts",
+                "keyword" : "FAOSTAT_DEFAULT_DOUBLE_AXES_BAR",
+                "renderTo" : "chart_2",
+                "title" : "",
+                "credits" : "M = Million, k = Thousand",
+                "yaxis" : {
+                    "min" : null,
+                    "max" : null,
+                    "tickInterval" : null,
+                    "title" : null
+                }
+            },
+            "sql" : {
+                "selects" : [
+                    {"aggregation" : null, "column" : "A.AreaName_$LANG", "alias" : "AreaName"},
+                    {"aggregation" : null, "column" : "'Baseline 2005/2007'", "alias" : "Year"},
+                    {"aggregation" : null, "column" : "AVG(D.Value)", "alias" : "Value"},
+                    {"aggregation" : null, "column" : "E.UnitName_$LANG", "alias" : "MU1"},
+                    {"aggregation" : null, "column" : "'2030'", "alias" : "Year"},
+                    {"aggregation" : null, "column" : "AVG(D1.Value)", "alias" : "Value1"},
+                    {"aggregation" : null, "column" : "E.UnitName_$LANG", "alias" : "MU1"},
+                    {"aggregation" : null, "column" : "'2050'", "alias" : "Year"},
+                    {"aggregation" : null, "column" : "AVG(D2.Value)", "alias" : "Value2"},
+                    {"aggregation" : null, "column" : "E.UnitName_$LANG", "alias" : "MU2"}
+                ],
+                "froms" : [
+                    {"column" : "Data", "alias" : "D"},
+                    {"column" : "Data", "alias" : "D1"},
+                    {"column" : "Data", "alias" : "D2"},
+                    {"column" : "Area", "alias" : "A"},
+                    {"column" : "Element", "alias" : "E"}
+                ],
+                "wheres" : [
+                    {"datatype" : "TEXT", "column" : "D.DomainCode", "operator" : "IN", "value": null, "ins" : ["'GE'"]},
+
+
+                    {"datatype" : "DATE", "column" : "D.ItemCode", "operator" : "IN", "value": null, "ins" : [1755]},
+                    {datatype : "DATE",column : "D.ElementListCode",operator : "IN",value : null,ins : [7231]},
+                    {datatype : "DATE",column : "D.AreaCode",operator : "IN",value : null,ins : [5000,5100,5200,5300,5400,5500]},
+                    {"datatype" : "DATE", "column" : "D.Year", "operator" : "IN", "value": null, "ins" : [2005, 2006, 2007]},
+
+                    {"datatype" : "DATE", "column" : "D1.Year", "operator" : "IN", "value": null, "ins" : [2030]},
+                    {"datatype" : "DATE", "column" : "D2.Year", "operator" : "IN", "value": null, "ins" : [2050]},
+
+                    {"datatype" : "DATE", "column" : "D.AreaCode", "operator" : "=", "value": "A.AreaCode", "ins" : []},
+                    {"datatype" : "DATE", "column" : "D.ElementCode", "operator" : "=", "value": "E.ElementCode", "ins" : []},
+
+                    {"datatype" : "DATE", "column" : "D.DomainCode", "operator" : "=", "value": "D1.DomainCode", "ins" : []},
+                    {"datatype" : "DATE", "column" : "D.ElementCode", "operator" : "=", "value": "D1.ElementCode", "ins" : []},
+                    {"datatype" : "DATE", "column" : "D.ItemCode", "operator" : "=", "value": "D1.ItemCode", "ins" : []},
+                    {"datatype" : "DATE", "column" : "D.AreaCode", "operator" : "=", "value": "D1.AreaCode", "ins" : []},
+
+                    {"datatype" : "DATE", "column" : "D.DomainCode", "operator" : "=", "value": "D2.DomainCode", "ins" : []},
+                    {"datatype" : "DATE", "column" : "D.ElementCode", "operator" : "=", "value": "D2.ElementCode", "ins" : []},
+                    {"datatype" : "DATE", "column" : "D.ItemCode", "operator" : "=", "value": "D2.ItemCode", "ins" : []},
+                    {"datatype" : "DATE", "column" : "D.AreaCode", "operator" : "=", "value": "D2.AreaCode", "ins" : []}
+
+                ],
+                "orderBys" : [
+                    {"column" : "A.AreaName_$LANG", "direction" : "ASC"}
+                ],
+                groupBys : [
+                    {"column" : "A.AreaName_$LANG"},
+                    {"column" : "E.UnitName_$LANG"}
+                ],
+                "limit" : null,
+                "query" : null,
+                "frequency" : null
+            },
+            "export_parameters" : {
+            }
+        }
+    ]
+}
