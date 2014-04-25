@@ -4,7 +4,7 @@ if (!window.Export) {
 			
 		exportDataMap : function(object) {
             /** Stream the Excel through the hidden form */
-            $('#datasource_WQ').val(FAOSTATBrowse.datasource);
+            $('#datasource_WQ').val(FAOSTATBrowse.CONFIG.DATASOURCE);
             $('#thousandSeparator_WQ').val(',');
             $('#decimalSeparator_WQ').val('.');
             $('#decimalNumbers_WQ').val('2');
@@ -19,7 +19,7 @@ if (!window.Export) {
 
 		exportPlainData : function(object) {
             /** Stream the Excel through the hidden form */
-            $('#datasource_WQ').val(FAOSTATBrowse.datasource);
+            $('#datasource_WQ').val(FAOSTATBrowse.CONFIG.DATASOURCE);
             $('#thousandSeparator_WQ').val(',');
             $('#decimalSeparator_WQ').val('.');
             $('#decimalNumbers_WQ').val('2');
@@ -37,7 +37,7 @@ if (!window.Export) {
 		exportData : function(object) {
             var exportObject = Export.injectParameters(JSON.parse(JSON.stringify(object)));
             /** Stream the Excel through the hidden form */
-            $('#datasource_WQ').val(FAOSTATBrowse.datasource);
+            $('#datasource_WQ').val(FAOSTATBrowse.CONFIG.DATASOURCE);
             $('#thousandSeparator_WQ').val(',');
             $('#decimalSeparator_WQ').val('.');
             $('#decimalNumbers_WQ').val('2');

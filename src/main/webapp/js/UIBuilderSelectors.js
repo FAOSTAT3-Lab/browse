@@ -2,7 +2,27 @@ if (!window.UIBuilderSelectors) {
 
     window.UIBuilderSelectors = {
 
-        appendSelectors : function(selectors) {
+        $selectors : "selectors",
+        $selector_dd_fromyear : 'selector_dd_fromyear',
+        $selector_dd_toyear : 'selector_dd_toyear',
+
+        BASE_URL_DBMS : "", //pass it on the function
+        BASE_URL_WDS : "", //pass it on the function
+        DATASOURCE: "",
+        WIDTH: "",
+
+        appendSelectors : function(selectors, lang) {
+            console.log('appendSelectors')
+            console.log(lang)
+            lang = lang.toUpperCase()
+
+            // TODO: load it dinamically
+            UIBuilderSelectors.BASE_URL_DBMS = FAOSTATBrowse.CONFIG.BASE_URL_DBMS;
+            UIBuilderSelectors.BASE_URL_WDS = FAOSTATBrowse.CONFIG.BASE_URL_WDS;
+            UIBuilderSelectors.WIDTH = FAOSTATBrowse.CONFIG.width_browse_by_domain;
+            UIBuilderSelectors.DATASOURCE = FAOSTATBrowse.CONFIG.DATASOURCE;
+
+
             var s = '<table width="100%">';
             s += '<tr>';
             var width = 100 / selectors.length;
@@ -17,183 +37,76 @@ if (!window.UIBuilderSelectors) {
             s += '</tr>';
             s += '</table>';
 
-            /** var s = '<div style="display:inline; position:relative;">'
-             for (var i = 0 ; i < selectors.length ; i++) {
-
-                s += '<div style="width:100px">';
-                    s += '<div class="visualize_filters_combo">' + $.i18n.prop('_' + selectors[i].keyword); + '</div>';
-                    s += '<div id="selector_' + selectors[i].keyword + '></div>';
-                s += '</div>';
-
-            }
-             s += '</div>';  **/
-
-
-            $('#selectors').append(s);
+            $('#' + UIBuilderSelectors.$selectors).append(s);
             for (var i = 0 ; i < selectors.length ; i++) {
-                UIBuilderSelectors.populateSelector(selectors[i]);
+                UIBuilderSelectors.populateSelector(selectors[i], lang);
             }
         },
 
-        populateSelector : function(selector) {
+        populateSelector : function(selector, lang) {
             switch (selector.type) {
-                case 'dropdown_aggregation': UIBuilderSelectors.populateNoSQLSelector(selector); break;
-                case 'dropdown_orderby': UIBuilderSelectors.populateFixedValues(selector); break;
+                case 'dropdown_aggregation': UIBuilderSelectors.populateNoSQLSelector(selector, lang); break;
+                case 'dropdown_orderby': UIBuilderSelectors.populateFixedValues(selector, lang); break;
                 // TODO: change the name in the JSON configuration files to dropdown_years_fixed
-                case 'dropdown_years_projection': UIBuilderSelectors.populateFixedValues(selector); break;
-                default: UIBuilderSelectors.populateDefaultSelector(selector); break;
+                case 'dropdown_years_projection': UIBuilderSelectors.populateFixedValues(selector, lang); break;
+                default: UIBuilderSelectors.populateDefaultSelector(selector, lang); break;
             }
         },
 
-        populateNoSQLSelector : function(selector) {
+        populateNoSQLSelector : function(selector, lang) {
+            console.log('populateNoSQLSelector')
+            console.log(UIBuilderSelectors.BASE_URL_DBMS)
             $.ajax({
                 type : 'POST',
-                url :  FAOSTATBrowse.baseurl_dbms + selector.rest,
+                url :  UIBuilderSelectors.BASE_URL_DBMS + selector.rest,
                 success : function(response) {
-                    var tmp = response;
-                    if (typeof tmp == 'string')
-                        tmp = $.parseJSON(response);
+                    var json = (typeof response == 'string')? $.parseJSON(response) : response;
                     var data = [];
-                    var selectedIndex = 0;
-                    for (var i = 0 ; i < tmp.length ; i++) {
-                        var parse = $.parseJSON(tmp[i]);
-                        var row = {};
-                        row.code = parse.code;
-                        row.label = parse[FAOSTATBrowse.lang + '_label'];
-                        data.push(row);
-                        if (row.code == selector.default_code)
-                            selectedIndex = i;
+                    for (var i = 0 ; i < json.length ; i++) {
+                        var parse = $.parseJSON(json[i]);
+                        var row = []
+                        row.push(parse.code)
+                        row.push(parse[lang + '_label'])
+                        data.push(row)
                     }
+                    UIBuilderSelectors._createDropDown(data, selector, 'selector_' + selector.keyword, 'selector_dd_' + selector.keyword, selector.width, lang);
 
-                    $('#selector_' + selector.keyword).jqxComboBox({
-                        // id: selector.keyword,
-                        source: data,
-                        selectedIndex: selectedIndex,
-                        width: selector.width,
-                        height: '25px',
-                        theme: FAOSTATBrowse.theme
-                    });
-
-                    $('#selector_' + selector.keyword).on('change', function (event)  {
-                        var args = event.args;
-                        if (args) {
-                            var item = args.item;
-                            UIBuilder.onchange(selector.keyword, item.originalItem.code, FAOSTATBrowse.width_browse_by_domain);
-                        }
-                    });
-
-                }, error : function(err, b, c) {
-
-                }
-
+                }, error : function(err, b, c) {}
             });
-
         },
 
-        populateFixedValues : function(selector) {
+        populateFixedValues : function(selector, lang) {
             var data = [];
             for (var i = 0 ; i < selector.codes.length ; i++) {
-                var row = {};
-                row.code = selector.codes[i].code;
-                row.label = selector.codes[i][FAOSTATBrowse.lang + '_label'];
-                data.push(row);
-                if (row.code == selector.default_code)
-                    selectedIndex = i;
+                var parse = selector.codes[i];
+                var row = []
+                row.push(parse.code)
+                row.push(parse[lang + '_label'])
+                data.push(row)
             }
-
-            $('#selector_' + selector.keyword).jqxComboBox({
-                // id: selector.keyword,
-                source: data,
-                selectedIndex: selectedIndex,
-                width: selector.width,
-                height: '25px',
-                theme: FAOSTATBrowse.theme
-            });
-            $('#selector_' + selector.keyword).on('change', function (event)  {
-                var args = event.args;
-                if (args) {
-                    var item = args.item;
-                    UIBuilder.onchange(selector.keyword, item.originalItem.code, FAOSTATBrowse.width_browse_by_domain);
-                }
-            });
+            UIBuilderSelectors._createDropDown(data, selector, 'selector_' + selector.keyword, 'selector_dd_' + selector.keyword, selector.width, lang);
         },
 
-        populateDefaultSelector : function(selector) {
+        populateDefaultSelector : function(selector, lang) {
             var data = {};
-            data.datasource = FAOSTATBrowse.datasource;
+            data.datasource = UIBuilderSelectors.DATASOURCE;
             data.thousandSeparator = ',';
             data.decimalSeparator = '.';
             data.decimalNumbers = '2';
             data.json = JSON.stringify(selector.sql);
             data.cssFilename = 'faostat';
-
             $.ajax({
                 type : 'POST',
-                url : 'http://' + FAOSTATBrowse.baseurl + '/wds/rest/table/json',
+                url : UIBuilderSelectors.BASE_URL_WDS + '/rest/table/json',
                 data : data,
                 success : function(response) {
-                    var json = response;
-                    if (typeof json == 'string')
-                        json = $.parseJSON(response);
-                    var data = [];
-                    var selectedIndex = 0;
+                    var json = (typeof response == 'string')? $.parseJSON(response) : response;
                     switch (selector.type) {
                         case 'dropdown_year':
-                            var counter = 0;
-                            for (var i = parseInt(json[0][1]) ; i >= parseInt(json[0][0]) ; i--) {
-                                var tmp = {};
-                                tmp.code = i;
-                                tmp.label = i;
-                                data.push(tmp);
-                                if (tmp.code == selector.default_code)
-                                    selectedIndex = counter;
-                                counter++;
-                            }
+                            UIBuilderSelectors._createDropDownTimerange(json, selector, 'selector_' + selector.keyword, 'selector_dd_' + selector.keyword, selector.width, lang);
                             break;
                         default:
-                            for (var i = 0 ; i < json.length ; i++) {
-                                var tmp = {};
-                                tmp.code = json[i][0];
-                                tmp.label = json[i][1];
-                                data.push(tmp);
-                                if (tmp.code == selector.default_code)
-                                    selectedIndex = i;
-                            }
-                            break;
-                    }
-                    $('#selector_' + selector.keyword).jqxComboBox({
-                        // id: selector.keyword,
-                        source: data,
-                        selectedIndex: selectedIndex,
-                        width: selector.width,
-                        height: '25px',
-                        theme: FAOSTATBrowse.theme
-                    });
-                    switch (selector.keyword) {
-                        case 'fromyear':
-                            //TODO: get from year and toyear
-                            $('#selector_fromyear').on('change', function (event)  {
-                                UIBuilderSelectors.onChangeTimeriod();
-                                // make a list fromyear toyear
-                                // send to the method
-                            });
-                            break;
-                        case 'toyear':
-                            $('#selector_toyear').on('change', function (event)  {
-                                UIBuilderSelectors.onChangeTimeriod();
-                            });
-                            // TODO: get from year and toyear
-                            break;
-                        default:
-                            $('#selector_' + selector.keyword).on('change', function (event)  {
-                                var args = event.args;
-                                if (args) {
-                                    var item = args.item;
-                                    var values = [];
-                                    values.push(item.originalItem.code);
-                                    UIBuilder.onchange(selector.keyword, values, FAOSTATBrowse.width_browse_by_domain);
-                                }
-                            });
+                            UIBuilderSelectors._createDropDown(json, selector, 'selector_' + selector.keyword, 'selector_dd_' + selector.keyword, selector.width, lang);
                             break;
                     }
                 },
@@ -202,30 +115,69 @@ if (!window.UIBuilderSelectors) {
                 }
             });
         },
-        onChangeTimeriod: function() {
 
+        _createDropDown: function(json, selector, divID, dropdowndID, width, lang) {
+            //console.log(json)
+            // TODO: dynamic width
+            var html = '<select id="'+ dropdowndID+'" style="width:"'+ width +'">';
+            for(var i=0; i < json.length; i++) {
+                var selected = (json[i][0] == selector.default_code)? 'selected': '';
+                html += '<option value="' + json[i][0] + '" '+ selected +'>' + json[i][1] + '</option>';
+            }
+            html += '</select>';
+            $('#' + divID).empty();
+            $('#' + divID).append(html);
+            try { $('#' + dropdowndID).chosen({disable_search_threshold:10, width: '100%'});}  catch (e) {}
+            $( "#" + dropdowndID ).change({selector: selector},  function (event) {
+                var keyword = event.data.selector.keyword;
+                console.log($( this ).val())
+                var values = [];
+                values.push( $( this ).val());
+                UIBuilder.onchange(keyword, values, UIBuilderSelectors.WIDTH, lang)
+            });
+        },
+
+        _createDropDownTimerange: function(json, selector, divID, dropdowndID, width, lang) {
+            var data = [];
+            for (var i = parseInt(json[0][1]) ; i >= parseInt(json[0][0]) ; i--) {
+                data.push(i);
+            }
+            // TODO: dynamic width
+            var html = '<select id="'+ dropdowndID+'" style="width:"'+ width +'">';
+            for(var i=0; i < data.length; i++) {
+                var selected = (data[i] == selector.default_code)? 'selected': '';
+                html += '<option value="' + data[i] + '" '+ selected +'>' + data[i] + '</option>';
+            }
+            html += '</select>';
+            $('#' + divID).empty();
+            $('#' + divID).append(html);
+            try { $('#' + dropdowndID).chosen({"disable_search": true, "width": '100%'}); } catch (e) {}
+            $( "#" + dropdowndID ).change(function (event) {
+                UIBuilderSelectors.onChangeTimeriod(lang);
+            });
+        },
+
+        onChangeTimeriod: function(lang) {
             switch (FAOSTATBrowse.section) {
                 case 'DOMAIN'   : BROWSE_STATS.updateBrowseByDomain();          break;
                 case 'AREA'     : BROWSE_STATS.updateBrowseByCountryRegion();   break;
                 case 'RANKINGS' : BROWSE_STATS.updateBrowseRankings();          break;
             }
+            var fromyear = $('#' + UIBuilderSelectors.$selector_dd_fromyear).val();
+            var toyear   = $('#' + UIBuilderSelectors.$selector_dd_toyear).val();
 
-            var fromyear = $('#selector_fromyear').jqxComboBox('getSelectedItem');
-            var toyear = $('#selector_toyear').jqxComboBox('getSelectedItem');
-
-            if ( fromyear.originalItem.code > toyear.originalItem.code ) {
+            if ( fromyear > toyear ) {
+                // TODO: multilanguage
                 alert("Please make sure that your year selection is fine");
             }
             else{
                 var values = [];
-                for (var i = fromyear.originalItem.code ; i <= toyear.originalItem.code; i++ ) {
+                for (var i = fromyear ; i <= toyear; i++ ) {
                     values.push(i);
                 }
-                UIBuilder.onchange("year", values, FAOSTATBrowse.width_browse_by_domain);
-
+                UIBuilder.onchange("year", values, UIBuilderSelectors.WIDTH, lang);
             }
         }
 
     };
-
 }

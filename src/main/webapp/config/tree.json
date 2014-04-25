@@ -1,4 +1,4 @@
 {
-	"datasource":   "faostatproddiss",
+	"datasource":   "faostat2",
 	"baseurl":      "faostat3.fao.org"
 }

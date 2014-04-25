@@ -45,8 +45,7 @@ var UIBuilderMap = function() {
             '<div id="obj_footer_REPLACE" class="obj-box-footer"></div> ' +
             '</div>',
 
-        createMap : function(obj) {
-
+        createMap : function(obj, lang) {
             var structure = CORE.replaceAll(this.objStructure, 'REPLACE', obj.object_parameters.renderTo);
             structure = CORE.replaceAll(structure, '$_WIDTH',  obj.width );
             structure = CORE.replaceAll(structure, '$_HEIGHT',  obj.height );
@@ -54,9 +53,9 @@ var UIBuilderMap = function() {
             var suffix =  obj.object_parameters.renderTo;
 
             $('#content_' + suffix).append(structure);
-            $('#obj_title_' + suffix).append(obj[FAOSTATBrowse.lang + '_title']);
+            $('#obj_title_' + suffix).append(obj[lang + '_title']);
             $('#obj_subtitle_' + suffix).append(obj.subtitle);
-            $('#obj_footer_' + suffix).append(obj[FAOSTATBrowse.lang + '_footnote']);
+            $('#obj_footer_' + suffix).append(obj[lang + '_footnote']);
 
             // tooltip
             document.getElementById('obj_point_' + suffix).title = $.i18n.prop('_map_point');
@@ -70,7 +69,7 @@ var UIBuilderMap = function() {
 
 
             // query and create the map
-            this.queryDBandMapCreate(obj);
+            this.queryDBandMapCreate(obj, lang);
 
             // add shaded/point
             var _this = this;
@@ -89,39 +88,34 @@ var UIBuilderMap = function() {
 
         },
 
-
-        refreshmap : function(obj, jointype) {
-
+        refreshmap : function(obj, jointype, lang) {
             // get div replace (take widht and height)
             this.iframeURL = this.addParameter(this.iframeURL, 'jointype', jointype);
-            this.createIframe(obj);
+            this.createIframe(obj, lang);
         },
 
-        queryDBandMapCreate : function(obj, response) {
-
+        queryDBandMapCreate : function(obj, lang) {
             var data = {};
-            data.datasource = FAOSTATBrowse.datasource,
+            data.datasource = FAOSTATBrowse.CONFIG.DATASOURCE,
             data.thousandSeparator = ',';
             data.decimalSeparator = '.';
             data.decimalNumbers = this.decimalValues;
             data.json = JSON.stringify(obj.sql);
             data.cssFilename = 'faostat';
             data.valueIndex = '1';
-
             var _this = this;
-            //console.log(data);
             $.ajax({
                 type : 'POST',
-                url : 'http://' + FAOSTATBrowse.baseurl + '/wds/rest/table/json',
+                url : FAOSTATBrowse.CONFIG.BASE_URL_WDS + '/rest/table/json',
                 data : data,
                 success : function(response) {
-                    _this.getData(obj, response);
+                    _this.getData(obj, response, lang);
                 },
                 error : function(err, b, c) { }
             });
         },
 
-        getData : function(obj, response) {
+        getData : function(obj, response, lang) {
             var data = response;
             if (typeof data == 'string')
                 data = $.parseJSON(response);
@@ -149,11 +143,11 @@ var UIBuilderMap = function() {
                 joindata += ']';
 
                 this.joindata = joindata;
-                this.createIframeURL(obj);
+                this.createIframeURL(obj, lang);
             }
         },
-        createIframeURL: function(obj) {
-            this.iframeURL = "http://" + FAOSTATBrowse.baseurl_maps + "/maps/api?" +
+        createIframeURL: function(obj, lang) {
+            this.iframeURL = FAOSTATBrowse.CONFIG.BASE_URL_MAPS + "/api?" +
                 "baselayers=" + this.baselayers +
                 "&layers=" + this.layers +
                 "&styles=" + this.styles +
@@ -162,7 +156,7 @@ var UIBuilderMap = function() {
                 "&enablejoingfi="+ this.enablejoingfi +
                 "&legendtitle=" + this.mu + // should dynamic measurement unit
                 "&mu=" + this.mu +
-                "&lang=" + FAOSTATBrowse.lang +
+                "&lang=" + lang +
                 "&classification=" + this.classification +
                 "&zoomto=FAOSTAT(" + this.zoomto + ")" +
                 "&jointype=" + this.jointype;

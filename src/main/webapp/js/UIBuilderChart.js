@@ -20,7 +20,7 @@ if (!window.UIBuilderChart) {
                 '<div id="obj_footer_REPLACE" class="obj-box-footer" style="display:none"></div> ' +
                 '</div>',
 
-        appendChart : function(chart) {
+        appendChart : function(chart, lang) {
 
             var structure = CORE.replaceAll(this.objStructure, 'REPLACE', chart.object_parameters.renderTo);
             structure = CORE.replaceAll(structure, '$_WIDTH',  chart.width );
@@ -29,15 +29,15 @@ if (!window.UIBuilderChart) {
             $('#content_' + chart.object_parameters.renderTo).append(structure);
 
             // Loading image
-            document.getElementById(chart.object_parameters.renderTo).innerHTML = "<div style='height:"+ this.height+"'><img src='"+ FAOSTATBrowse.prefix +'images/loading.gif' +"'></div>";
+            document.getElementById(chart.object_parameters.renderTo).innerHTML = "<div style='height:"+ this.height+"'><img src='"+ FAOSTATBrowse.CONFIG.PREFIX +'images/loading.gif' +"'></div>";
 
 
-            $('#obj_title_' + chart.object_parameters.renderTo).append(chart[FAOSTATBrowse.lang + '_title']);
+            $('#obj_title_' + chart.object_parameters.renderTo).append(chart[lang + '_title']);
             $('#obj_subtitle_' + chart.object_parameters.renderTo).append(chart.subtitle);
 
-            if (chart[FAOSTATBrowse.lang + '_footnote'] != null && chart[FAOSTATBrowse.lang + '_footnote'] != '' ) {
+            if (chart[lang + '_footnote'] != null && chart[lang + '_footnote'] != '' ) {
                 $('#obj_footer_' + chart.object_parameters.renderTo).css('display', 'inline-block');
-                $('#obj_footer_' + chart.object_parameters.renderTo).append(chart[FAOSTATBrowse.lang + '_footnote']);
+                $('#obj_footer_' + chart.object_parameters.renderTo).append(chart[lang + '_footnote']);
             }
 
             var suffix =  chart.object_parameters.renderTo;
@@ -58,7 +58,7 @@ if (!window.UIBuilderChart) {
         queryDBAndCreateChart : function(chart) {
 
             var data = {};
-            data.datasource = FAOSTATBrowse.datasource;
+            data.datasource = FAOSTATBrowse.CONFIG.DATASOURCE;
             data.thousandSeparator = ',';
             data.decimalSeparator = '.';
             data.decimalNumbers = '2';
@@ -67,7 +67,7 @@ if (!window.UIBuilderChart) {
 
             $.ajax({
                 type : 'POST',
-                url : 'http://' + FAOSTATBrowse.baseurl + '/wds/rest/table/json',
+                url : FAOSTATBrowse.CONFIG.BASE_URL_WDS + '/rest/table/json',
                 data : data,
 
                 success : function(response) {
@@ -85,11 +85,9 @@ if (!window.UIBuilderChart) {
                         case 'FAOSTAT_DEFAULT_PIE': UIBuilderChart.queryDBAndCreateChart_Pie(chart, response); break;
                         case 'FAOSTAT_DEFAULT_GROWTHRATE': UIBuilderChart.queryDBAndCreateChart_GrowthRate(chart, response); break;
                     }
-
                 },
-
                 error : function(err, b, c) {
-
+                    console.log('ERROR:UIBuilderChart query');
                 }
 
             });

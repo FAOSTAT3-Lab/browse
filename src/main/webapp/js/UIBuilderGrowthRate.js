@@ -19,19 +19,19 @@ if (!window.UIBuilderGrowthRate) {
             '<div id="obj_footer_REPLACE" class="obj-box-footer" style="display:none"></div> ' +
             '</div>',
 
-        appendGrowthRateUI: function (growthrate) {
+        appendGrowthRateUI: function (growthrate, lang) {
 
             var suffix = growthrate.object_parameters.renderTo;
             var structure = CORE.replaceAll(this.objStructure, 'REPLACE', suffix);
 
             $('#content_' + suffix).append(structure);
 
-            $('#obj_title_' + suffix).append(growthrate[FAOSTATBrowse.lang + '_title']);
+            $('#obj_title_' + suffix).append(growthrate[lang + '_title']);
             $('#obj_subtitle_' + suffix).append(growthrate.subtitle);
 
-            if (growthrate[FAOSTATBrowse.lang + '_footnote'] != null && growthrate[FAOSTATBrowse.lang + '_footnote'] != '') {
+            if (growthrate[lang + '_footnote'] != null && growthrate[lang + '_footnote'] != '') {
                 $('#obj_footer_' + suffix).css('display', 'inline-block');
-                $('#obj_footer_' + suffix).append(growthrate[FAOSTATBrowse.lang + '_footnote']);
+                $('#obj_footer_' + suffix).append(growthrate[lang + '_footnote']);
             }
 
             // tooltip
@@ -44,23 +44,18 @@ if (!window.UIBuilderGrowthRate) {
         },
 
         queryDBAndCreateGrowthRate: function (growthrate) {
-
             var data = {};
-            data.datasource = FAOSTATBrowse.datasource;
+            data.datasource = FAOSTATBrowse.CONFIG.DATASOURCE;
             data.thousandSeparator = ',';
             data.decimalSeparator = '.';
             data.decimalNumbers = '2';
             data.json = JSON.stringify(growthrate.sql);
             data.cssFilename = 'faostat';
-
             $.ajax({
-
                 type: 'POST',
-                url: 'http://' + FAOSTATBrowse.baseurl + '/wds/rest/table/json',
+                url: FAOSTATBrowse.CONFIG.BASE_URL_WDS+ '/rest/table/json',
                 data: data,
-
                 success: function (response) {
-
                     var data = response;
                     if (typeof data == 'string')
                         data = $.parseJSON(response);
@@ -99,7 +94,7 @@ if (!window.UIBuilderGrowthRate) {
             data.json = JSON.stringify(matrix);
             $.ajax({
                 type: 'POST',
-                url: 'http://' + FAOSTATBrowse.baseurl_r + '/r/rest/eval/multiplegrowthrate',
+                url: FAOSTATBrowse.CONFIG.BASE_URL_R_MULTIPLEGROWTHRATE,
                 data: data,
                 success: function (response) {
                     var table = response;

@@ -22,23 +22,23 @@ var UIBuilderTable = function() {
                 '<div id="obj_footer_REPLACE" class="obj-box-footer" style="display:none"></div> ' +
                 '</div>',
 
-		createTable : function(obj) {
+		createTable : function(obj, lang) {
 
             var suffix =  obj.object_parameters.renderTo;
             var structure = CORE.replaceAll(this.objStructure, 'REPLACE', suffix);
             structure = CORE.replaceAll(structure, '$_WIDTH',  obj.width );
 
             $('#content_' + suffix).append(structure);
-            $('#obj_title_' + suffix).append(obj[FAOSTATBrowse.lang + '_title']);
+            $('#obj_title_' + suffix).append(obj[lang + '_title']);
             $('#obj_subtitle_' + suffix).append(obj.subtitle);
 
             // Loading image
-            document.getElementById(suffix).innerHTML = "<div style='height:"+ this.height+"'><img src='"+ FAOSTATBrowse.prefix +'images/loading.gif' +"'></div>";
+            document.getElementById(suffix).innerHTML = "<div style='height:"+ this.height+"'><img src='"+ FAOSTATBrowse.CONFIG.PREFIX +'images/loading.gif' +"'></div>";
 
 
-            if (obj[FAOSTATBrowse.lang + '_footnote'] != null && obj[FAOSTATBrowse.lang + '_footnote'] != '' ) {
+            if (obj[lang + '_footnote'] != null && obj[lang + '_footnote'] != '' ) {
                 $('#obj_footer_' + suffix).css('display', 'inline-block');
-                $('#obj_footer_' + suffix).append(obj[FAOSTATBrowse.lang + '_footnote']);
+                $('#obj_footer_' + suffix).append(obj[lang + '_footnote']);
             }
 
             // tooltip
@@ -58,7 +58,7 @@ var UIBuilderTable = function() {
 		queryDB: function(obj, response) {
 			
 			var data = {};
-			data.datasource = FAOSTATBrowse.datasource,
+			data.datasource = FAOSTATBrowse.CONFIG.DATASOURCE,
 			data.thousandSeparator = ',';
 			data.decimalSeparator = '.';
 			data.decimalNumbers = this.decimalValues;
@@ -71,7 +71,7 @@ var UIBuilderTable = function() {
 			var _this = this;
 			$.ajax({
 				type : 'POST',
-				url : 'http://' + FAOSTATBrowse.baseurl + '/wds/rest/table/html2',
+				url : FAOSTATBrowse.CONFIG.BASE_URL_WDS + '/rest/table/html2',
 				data : data,			
 				success : function(response) {				
 					_this.getData(obj, response);

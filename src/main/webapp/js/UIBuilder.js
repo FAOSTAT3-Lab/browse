@@ -5,7 +5,13 @@ if (!window.UIBuilder) {
         /** JSON objects are stored here to enable selectors */
         objects : null,
 
-        buildUI : function(json, title) {
+        buildUI : function(json, title, section, lang, width) {
+            console.log('-----------------------------')
+            console.log(json)
+            console.log(title)
+            console.log(section)
+            console.log(lang)
+            console.log(width)
 
             $('#title').empty();
             $('#tabs').empty();
@@ -18,11 +24,10 @@ if (!window.UIBuilder) {
 
             /** Convert from String to Object */
             var payload = json;
-            if (typeof payload == 'string')
-                payload = $.parseJSON(json);
+            if (typeof payload == 'string') payload = $.parseJSON(json);
 
             /** Inject multi-language into SQL definition */
-            payload = I18NInjector.injectLanguage(payload);
+            payload = I18NInjector.injectLanguage(payload, lang);
 
             /** Store objects as a global variable */
             UIBuilder.objects = payload.objects;
@@ -30,25 +35,25 @@ if (!window.UIBuilder) {
             /** Append Title */
             if ( title != null )
                 UIBuilder.appendTitle(title);
-            else if ( payload['abstract'][FAOSTATBrowse.lang + '_title'] != null )
-                UIBuilder.appendTitle(payload['abstract'][FAOSTATBrowse.lang + '_title']);
+            else if ( payload['abstract'][lang + '_title'] != null )
+                UIBuilder.appendTitle(payload['abstract'][lang + '_title']);
 
             /** Append subtitle */
-            if ( payload['abstract'][FAOSTATBrowse.lang + '_subtitle'] != null )
-                UIBuilder.appendSubtitleTitle(payload['abstract'][FAOSTATBrowse.lang + '_subtitle']);
+            if ( payload['abstract'][lang + '_subtitle'] != null )
+                UIBuilder.appendSubtitleTitle(payload['abstract'][lang + '_subtitle']);
 
             /** Append Selectors*/
             if ( payload.selectors != null )
-                UIBuilderSelectors.appendSelectors(payload.selectors);
+                UIBuilderSelectors.appendSelectors(payload.selectors, lang);
 
             /** Append Footnote*/
-            if ( payload.footnote != null ) $('#footnote').append(payload['footnote'][FAOSTATBrowse.lang + '_footnote']).show();
+            if ( payload.footnote != null ) $('#footnote').append(payload['footnote'][lang + '_footnote']).show();
 
             /** Build Objects Structure **/
-            UIBuilderObjectsStructure.buildObjectStructure(UIBuilder.objects, FAOSTATBrowse.width_browse_by_domain);
+            UIBuilderObjectsStructure.buildObjectStructure(UIBuilder.objects, width);
 
             /** Append Objects */
-            UIBuilder.appendObjects(UIBuilder.objects);
+            UIBuilder.appendObjects(UIBuilder.objects, lang);
         },
 
         appendTitle : function(text) {
@@ -60,13 +65,14 @@ if (!window.UIBuilder) {
             $('#subtitle').append(s);
         },
 
-        appendObjects : function(objects) {
+        appendObjects : function(objects, lang) {
+            console.log('LANG!!: ' + lang)
             for (var i = 0 ; i < objects.length ; i++) {
                 switch (objects[i].type) {
-                    case 'chart' : UIBuilderChart.appendChart(objects[i]); break;
-                    case 'growthrate' : UIBuilderGrowthRate.appendGrowthRateUI(objects[i]); break;
-                    case 'map' :  new UIBuilderMap().createMap(objects[i]); break;
-                    case 'table' :  new UIBuilderTable().createTable(objects[i]); break;
+                    case 'chart' : UIBuilderChart.appendChart(objects[i], lang); break;
+                    case 'growthrate' : UIBuilderGrowthRate.appendGrowthRateUI(objects[i], lang); break;
+                    case 'map' :  new UIBuilderMap().createMap(objects[i], lang); break;
+                    case 'table' :  new UIBuilderTable().createTable(objects[i], lang); break;
                 }
             }
         },
@@ -77,10 +83,9 @@ if (!window.UIBuilder) {
          *
          * Generic function to be called on selector's change.
          */
-        onchange : function(keyword, selectedCode, contentWidth) {
+        onchange : function(keyword, selectedCode, contentWidth, lang) {
             selectedCode = (typeof(selectedCode) == 'object' && selectedCode.length == 1)? selectedCode[0]: selectedCode;
-
-            switch (FAOSTATBrowse.section) {
+            switch (FAOSTATBrowse.CONFIG.section) {
                 case 'DOMAIN'   : BROWSE_STATS.updateBrowseByDomain();          break;
                 case 'AREA'     : BROWSE_STATS.updateBrowseByCountryRegion();   break;
                 case 'RANKINGS' : BROWSE_STATS.updateBrowseRankings();          break;
@@ -96,7 +101,7 @@ if (!window.UIBuilder) {
                             var wheres = UIBuilder.objects[i].sql.wheres;
                             for (var j = 0 ; j < wheres.length ; j++) {
                                 if (wheres[j].value == null && wheres[j].column.toUpperCase().indexOf('ITEMCODE') != -1) {
-                                    wheres[j].ins = [];
+                                    //wheres[j].ins = [];
                                     wheres[j].ins.push(selectedCode);
                                 }
                             }
@@ -134,7 +139,7 @@ if (!window.UIBuilder) {
 
                             /** Edit subtitles when aggregation changes */
                                 // TODO: create label
-                            I18NInjector.injectLanguage_Subtitles_cachedObjects(UIBuilder.objects[i], null , date);
+                            I18NInjector.injectLanguage_Subtitles_cachedObjects(UIBuilder.objects[i], null , date, lang);
                         }
                         break;
                     case 'area' :
@@ -171,7 +176,7 @@ if (!window.UIBuilder) {
                         if (UIBuilder.objects[i].aggregation_onchange == null || UIBuilder.objects[i].aggregation_onchange) {
 
                             /** Edit subtitles when aggregation changes */
-                            I18NInjector.injectLanguage_Subtitles_cachedObjects(UIBuilder.objects[i], selectedCode, null);
+                            I18NInjector.injectLanguage_Subtitles_cachedObjects(UIBuilder.objects[i], selectedCode, null, lang);
 
 
                             var selects = UIBuilder.objects[i].sql.selects;
@@ -234,7 +239,7 @@ if (!window.UIBuilder) {
             }
 
             /** Re-create objects */
-            UIBuilder.appendObjects(UIBuilder.objects);
+            UIBuilder.appendObjects(UIBuilder.objects, lang);
 
         },
 

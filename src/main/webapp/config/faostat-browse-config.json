@@ -1,21 +1,20 @@
 {
-	"datasource" :              "faostatproddiss",
-    "baseurl" :                 "faostat3.fao.org",
-	"baseurl_r" :               "faostat3.fao.org",
-	"baseurl_maps" :            "fenix.fao.org",
-	"baseurl_bletchley" :       "fenixapps.fao.org",
-    "baseurl_images" :          "http://168.202.28.214:8085/faostat-browse-js/images/",
-    "baseurl_notes" :           "http://168.202.28.214:8085/faostat-browse-js/notes",
-	"width_browse_by_domain" :  "755",
-	"width_browse_by_country" : "960",
+	"DATASOURCE":              "faostat2",
 
-    "baseurl_dbms" :            "http://fenixapps.fao.org",
-    "FAOSTAT_DBMS_SERVICENAME" : "/faostat-browse-dbms",
-    "FAOSTAT_DBMS_DATASOURCE" : "faostat-test",
-    "FAOSTAT_DBMS_REST_GETVIEW" : "/rest/parametric/nosql/get/view/",
+    "BASE_URL_WDS":            "http://faostat3.fao.org/wds",
+	"BASE_URL_R_MULTIPLEGROWTHRATE":              "http://faostat3.fao.org/r/rest/eval/multiplegrowthrate",
+	"BASE_URL_MAPS" :           "http://fenix.fao.org/maps",
+	"BASE_URL_BLETCHLEY":      "http://faostat3.fao.org/blatchely",
+    "BASE_URL_IMAGES":         "http://localhost:8080/browse/images/",
+    "BASE_URL_NOTES":          "http://localhost:8080/browse/notes",
+	"width_browse_by_domain":  "755",
+	"width_browse_by_country": "960",
 
-    "FAOSTAT_DBMS_BROWSE_STRUCTURE" : "browse_by_domain_structure"
+    "BASE_URL_DBMS":            "http://fenixapps.fao.org",
+    "FAOSTAT_DBMS_SERVICENAME":  "/faostat-browse-dbms",
+    "FAOSTAT_DBMS_DATASOURCE":   "faostat-test",
+    "FAOSTAT_DBMS_REST_GETVIEW": "/rest/parametric/nosql/get/view/",
 
-
+    "FAOSTAT_DBMS_BROWSE_STRUCTURE": "browse_by_domain_structure"
 
 }
