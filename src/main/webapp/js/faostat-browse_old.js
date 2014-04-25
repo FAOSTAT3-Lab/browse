@@ -7,7 +7,7 @@ if (!window.FAOSTATBrowse) {
          It can't be stored in the JSON configuration file because it is
          used to locate the JSON configuration file.
          */
-        prefix : 'http://168.202.28.214:8085/faostat-browse-js/',
+        prefix : 'http://localhost:8080/faostat-browse-js/',
 
         lang : 'E',
 
@@ -39,7 +39,14 @@ if (!window.FAOSTATBrowse) {
 
         section : null,
 
+        /*init: function(config) {
+
+        }, */
+
         init : function(groupCode, domainCode, lang) {
+            console.log(groupCode)
+            console.log(domainCode)
+            console.log(lang)
 
             /**
              * Language: as parameter or from the URL
@@ -47,9 +54,10 @@ if (!window.FAOSTATBrowse) {
             if (lang != null && lang.length > 0) {
                 FAOSTATBrowse.lang = lang;
             }
-            var tmp = $.url().param('lang');
-            if (tmp != null && tmp.length > 0)
-                FAOSTATBrowse.lang = tmp;
+            try {
+                var tmp = ($.url()) ? $.url().param('lang') : null;
+                if (tmp != null && tmp.length > 0) FAOSTATBrowse.lang = tmp;
+            } catch (exception){}
 
             /**
              * Group and Domain for the tree
@@ -125,10 +133,10 @@ if (!window.FAOSTATBrowse) {
 
         },
 
-        loadUI : function(keyword, subsection) {
+        loadUI : function(subsection, code) {
 
-            FAOSTATBrowse.groupCode = keyword;
-            FAOSTATBrowse.domainCode = subsection;
+            //FAOSTATBrowse.groupCode = keyword;
+            //FAOSTATBrowse.domainCode = subsection;
 
             switch (keyword) {
 
@@ -147,20 +155,20 @@ if (!window.FAOSTATBrowse) {
                 default:
                     radiobtn = document.getElementById('by_domain').checked = true;
                     BROWSE_STATS.showBrowseByDomain();
-                    FAOSTATBrowse.loadUI_ByDomain(keyword, subsection);
+                    FAOSTATBrowse.loadUI_ByDomain(keyword);
                     break;
             }
 
         },
 
-        loadUI_ByDomain : function(groupCode, domainCode) {
+        loadUI_ByDomain : function(code) {
             FAOSTATBrowse.groupCode = groupCode;
             FAOSTATBrowse.domainCode = domainCode;
             FAOSTATBrowse.upgradeURL(groupCode, domainCode);
             $('#main-content-leftsidebar').empty();
             $('#main-content-leftsidebar').load(FAOSTATBrowse.prefix + 'browse_by_domain.html', function() {
                 $("#selectorsHead").sticky({topSpacing:0});
-                FAOSTATBrowseTree.populateTree();
+                FAOSTATBrowse.loadView(code, "test");
             });
         },
 
