@@ -3,12 +3,12 @@ if (!window.FAOSTATBrowseUtils) {
 	window.FAOSTATBrowseUtils = {
 
         // TODO: use config file in the future
-        WIDTH_100: '713px',
-		WIDTH_66: '495px',
-		WIDTH_50: '330px',
-		WIDTH_33: '200px',
-		WIDTH_25: '180px',
-		WIDTH_20: '140px',
+        WIDTH_100: '428px',
+        WIDTH_66: '428px',
+        WIDTH_50: '428px',
+        WIDTH_33: '428px',
+        WIDTH_25: '296px',
+        WIDTH_20: '256px',
 
 
         // 100% configuration

@@ -8,7 +8,7 @@ if (!window.FAOSTATBrowse) {
          used to locate the JSON configuration file.
          */
         CONFIG : {
-            PLACEHOLDER : 'container',
+            PLACEHOLDER : 'main-content-leftsidebar',
             LANG : 'EN',
             //lang_iso2: 'EN',
 
@@ -58,7 +58,7 @@ if (!window.FAOSTATBrowse) {
                                 callback: function() {
                                     // modify languages
                                     document.getElementById('pageTitle').innerHTML = $.i18n.prop('_browse');
-                                    document.getElementById('by_domain_label').innerHTML = $.i18n.prop('_by_domain');
+                                    document.getElementById('domain_label').innerHTML = $.i18n.prop('_by_domain');
                                     document.getElementById('area_label').innerHTML = $.i18n.prop('_by_area');
                                     document.getElementById('rankings_label').innerHTML = $.i18n.prop('_rankings');
 
@@ -83,17 +83,17 @@ if (!window.FAOSTATBrowse) {
                 case 'area':
                     radiobtn = document.getElementById('area').checked = true;
                     BROWSE_STATS.showBrowseByCountryRegion();
-                    FAOSTATBrowse.loadUI_ByCountry(section);
+                    FAOSTATBrowse.loadUI_byArea(section, code);
                     FAOSTATBrowse.section = 'AREA';
                     break;
                 case 'rankings':
                     radiobtn = document.getElementById('rankings').checked = true;
                     BROWSE_STATS.showBrowseRankings();
-                    FAOSTATBrowse.loadUI_Rankings(section);
+                    FAOSTATBrowse.loadUI_Rankings(section, code);
                     FAOSTATBrowse.section = 'RANKINGS';
                     break;
                 default:
-                    radiobtn = document.getElementById('by_domain').checked = true;
+                    radiobtn = document.getElementById('domain').checked = true;
                     BROWSE_STATS.showBrowseByDomain();
                     FAOSTATBrowse.loadUI_ByDomain(section, code);
                     break;
@@ -106,17 +106,18 @@ if (!window.FAOSTATBrowse) {
             console.log(code)
             FAOSTATBrowse.upgradeURL(section, code);
 
-            $('#main-content-leftsidebar').empty();
-            $('#main-content-leftsidebar').load(FAOSTATBrowse.CONFIG.PREFIX + 'browse_by_domain.html', function() {
+            $('#' + FAOSTATBrowse.CONFIG.PLACEHOLDER).empty();
+            $('#' + FAOSTATBrowse.CONFIG.PLACEHOLDER).load(FAOSTATBrowse.CONFIG.PREFIX + 'browse_by_domain.html', function() {
                 $("#selectorsHead").sticky({topSpacing:0});
                 FAOSTATBrowse.loadView(section, code, "TITLE");
             });
         },
 
-        loadUI_ByCountry : function(subsection) {
+        loadUI_byArea : function(section, code) {
+            console.log('DAJE')
             $('#main-content-leftsidebar').empty();
-            FAOSTATBrowse.upgradeURL('area', subsection)
-            UIBuilderByCountry.buildUI(subsection);
+            FAOSTATBrowse.upgradeURL('area', section)
+            UIBuilderByCountry.buildUI(section, code, CORE.convertISO2toFAOSTATLang(FAOSTATBrowse.CONFIG.LANG.toLocaleUpperCase()));
         },
 
         loadUI_Rankings : function(subsection) {

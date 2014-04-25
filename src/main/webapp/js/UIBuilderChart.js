@@ -21,7 +21,6 @@ if (!window.UIBuilderChart) {
                 '</div>',
 
         appendChart : function(chart, lang) {
-
             var structure = CORE.replaceAll(this.objStructure, 'REPLACE', chart.object_parameters.renderTo);
             structure = CORE.replaceAll(structure, '$_WIDTH',  chart.width );
             structure = CORE.replaceAll(structure, '$_HEIGHT',  chart.height );

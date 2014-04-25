@@ -42,7 +42,7 @@ if (!window.I18NInjector) {
                 }
             }
             for (var i = 0 ; i < json.objects.length ; i++) {
-                json.objects[i].subtitle = json.objects[i][FAOSTATBrowse.lang + '_subtitle'];
+                json.objects[i].subtitle = json.objects[i][lang + '_subtitle'];
                 // Aggregation
                 if ( agg_label != null) {
                     json.objects[i].aggregation_label = agg_label;

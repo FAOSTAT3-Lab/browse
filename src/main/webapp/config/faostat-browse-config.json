@@ -3,11 +3,11 @@
 
     "BASE_URL_WDS":            "http://faostat3.fao.org/wds",
 	"BASE_URL_R_MULTIPLEGROWTHRATE":              "http://faostat3.fao.org/r/rest/eval/multiplegrowthrate",
-	"BASE_URL_MAPS" :           "http://fenix.fao.org/maps",
-	"BASE_URL_BLETCHLEY":      "http://faostat3.fao.org/blatchely",
+	"BASE_URL_MAPS" :          "http://fenix.fao.org/maps",
+	"BASE_URL_BLETCHLEY":      "http://lprapp16.fao.org:5012/bletchley",
     "BASE_URL_IMAGES":         "http://localhost:8080/browse/images/",
     "BASE_URL_NOTES":          "http://localhost:8080/browse/notes",
-	"width_browse_by_domain":  "755",
+	"width_browse_by_domain":  "960",
 	"width_browse_by_country": "960",
 
     "BASE_URL_DBMS":            "http://fenixapps.fao.org",

@@ -7,35 +7,39 @@ if (!window.UIBuilderByCountry) {
         /** JSON objects are stored here to enable selectors */
         objects : null,
 
-        buildUI : function(subsection) {
+        buildUI : function(section, code, lang) {
+            console.log('buildUI')
+            console.log(section)
+            console.log(code)
+            console.log(lang)
+
+
+            var datasource = FAOSTATBrowse.CONFIG.DATASOURCE;
+
             // load view if is gived a countrycode
-            if ( subsection != '*' && subsection != 'null') {
+            if ( code != '*' && code != 'null') {
                 $.ajax({
                     type: 'GET',
-                    url: 'http://'+ FAOSTATBrowse.baseurl_bletchley +'/bletchley/rest/codes/search/'+ subsection +'/areas/'+ FAOSTATBrowse.datasource +'/'+ FAOSTATBrowse.lang,
+                    url: FAOSTATBrowse.CONFIG.BASE_URL_BLETCHLEY + '/rest/codes/search/'+ code +'/areas/'+ datasource +'/'+ lang,
                     success : function(response) {
-                        var data = response;
-                        if (typeof data == 'string')
-                            data = $.parseJSON(response);
-                        UIBuilderByCountry.buildCountryView(subsection, response[0].label)
-
+                        var data = (typeof response == 'string')? $.parseJSON(response) : response;
+                        UIBuilderByCountry.buildCountryView(code, response[0].label, lang)
                     },
                     error : function(err,b,c) {
-                        alert(err.status + ", " + b + ", " + c);
+                        alert('HRE' + err.status + ", " + b + ", " + c);
                     }
                 });
-
             }else {
                 // load default view
-                this.buildArea("5100", $.i18n.prop('_africa'));
-                this.buildArea("5200", $.i18n.prop('_america'));
-                this.buildArea("5300", $.i18n.prop('_asia'));
-                this.buildArea("5400", $.i18n.prop('_europe'));
-                this.buildArea("5500", $.i18n.prop('_oceania'));
+                this.buildArea("5100", $.i18n.prop('_africa'), datasource, lang);
+                this.buildArea("5200", $.i18n.prop('_america'), datasource, lang);
+                this.buildArea("5300", $.i18n.prop('_asia'), datasource, lang);
+                this.buildArea("5400", $.i18n.prop('_europe'), datasource, lang);
+                this.buildArea("5500", $.i18n.prop('_oceania'), datasource, lang);
             }
-
         },
-        buildArea: function(code, label) {
+
+        buildArea: function(code, label, datasource, lang) {
 
             var s = '<div style="padding:10px 20px 20px 20px">';
             s += '<div class="standard-title">'+ label +'</div>';
@@ -46,14 +50,14 @@ if (!window.UIBuilderByCountry) {
 
 
 
-            this.createCountriesTable(code);
+            this.createCountriesTable(code, datasource, lang);
             $('#main-content-leftsidebar').append(s);
         },
-        createCountriesTable: function(code) {
+        createCountriesTable: function(code, datasource, lang) {
 
             $.ajax({
                 type : 'GET',
-                url : 'http://' + FAOSTATBrowse.baseurl_bletchley + '/bletchley/rest/codes/all/countries/' + FAOSTATBrowse.datasource + '/'+ code +'/'+ FAOSTATBrowse.lang,
+                url : FAOSTATBrowse.CONFIG.BASE_URL_BLETCHLEY + '/rest/codes/all/countries/' + datasource + '/'+ code +'/'+ lang,
 
                 success : function(response) {
 
@@ -114,7 +118,7 @@ if (!window.UIBuilderByCountry) {
                     for (var i = 0 ; i < data.length ; i++) {
                         var c = data[i].code;
                         var l = data[i].label;
-                        $("#country_" + data[i].code).click({code: c, label: l}, UIBuilderByCountry.onCountryClick);
+                        $("#country_" + data[i].code).click({code: c, label: l, lang: lang}, UIBuilderByCountry.onCountryClick);
                     }
                 },
                 error : function(err, b, c) { }
@@ -123,15 +127,16 @@ if (!window.UIBuilderByCountry) {
         onCountryClick: function(event) {
             var code = event.data.code;
             var label = event.data.label;
-            UIBuilderByCountry.buildCountryView(code, label);
+            var lang = event.data.lang;
+            UIBuilderByCountry.buildCountryView(code, label, lang);
         },
 
-        getCountryLabel: function(code) {
+        getCountryLabel: function(code, datasource, lang) {
             // TODO: implement the call
 
             $.ajax({
                 type : 'GET',
-                url : 'http://' + FAOSTATBrowse.baseurl_bletchley + '/bletchley/rest/codes/all/countries/' + FAOSTATBrowse.datasource + '/'+ code +'/'+ FAOSTATBrowse.lang,
+                url :  FAOSTATBrowse.CONFIG.BASE_URL_BLETCHLEY + '/rest/codes/all/countries/' +datasource + '/'+ code +'/'+ lang,
 
                 success : function(response) {
 
@@ -145,35 +150,34 @@ if (!window.UIBuilderByCountry) {
                 error : function(err, b, c) { }
             });
         },
-        buildCountryView: function(code, label) {
+        buildCountryView: function(code, label, lang) {
+            console.log('buildCountryView');
             // get json gefinition and create the objects
             var data = {};
             data.viewID = UIBuilderByCountry.view_id;
-            data.schema = FAOSTATBrowse.FAOSTAT_DBMS_DATASOURCE;
+            data.schema = FAOSTATBrowse.CONFIG.FAOSTAT_DBMS_DATASOURCE;
 
-            $('#main-content-leftsidebar').empty();
-            $('#main-content-leftsidebar').load(FAOSTATBrowse.prefix + 'browse_by_country.html', function() {
+            $('#' + FAOSTATBrowse.CONFIG.PLACEHOLDER).empty();
+            $('#' +  FAOSTATBrowse.CONFIG.PLACEHOLDER).load(FAOSTATBrowse.CONFIG.PREFIX + 'browse_by_country.html', function() {
                 $.ajax({
                     type : 'POST',
-                    url : FAOSTATBrowse.baseurl_dbms + FAOSTATBrowse.FAOSTAT_DBMS_SERVICENAME + FAOSTATBrowse.FAOSTAT_DBMS_REST_GETVIEW,
+                    url  : FAOSTATBrowse.CONFIG.BASE_URL_DBMS + FAOSTATBrowse.CONFIG.FAOSTAT_DBMS_SERVICENAME + FAOSTATBrowse.CONFIG.FAOSTAT_DBMS_REST_GETVIEW,
                     data : data,
                     success : function(response) {
-                        UIBuilderByCountry.buildUICountryView(response, code, label);
+                        UIBuilderByCountry.buildUICountryViewUI(response, code, label, lang);
                     },
                     error : function(err, b, c) {
-                        //console.log(err.status + ", " + b + ", " + c);
+                        console.log(err.status + ", " + b + ", " + c);
                     }
                 });
 
             });
         },
-        buildUICountryView : function(json, code, label) {
-            var payload = json;
-            if (typeof payload == 'string')
-                payload = $.parseJSON(json);
+        buildUICountryViewUI : function(payload, code, label, lang) {
+            var payload = (typeof payload == 'string')? $.parseJSON(payload) : payload;
 
             /** Inject multi-language into SQL definition */
-            payload = I18NInjector.injectLanguage(payload);
+            payload = I18NInjector.injectLanguage(payload, lang);
 
             /** Store objects as a global variable */
             UIBuilder.objects = payload.objects;
@@ -182,7 +186,7 @@ if (!window.UIBuilderByCountry) {
             $('#title').append('<div class="visualize_title">'+ label +'<div>');
 
             /** country change */
-            UIBuilder.onchange('area', code, FAOSTATBrowse.width_browse_by_country);
+            UIBuilder.onchange('area', code, FAOSTATBrowse.CONFIG.width_browse_by_country, lang);
 
             FAOSTATBrowse.upgradeURL('area', code)
         }
