@@ -89,21 +89,21 @@ if (!window.UIBuilderByCountry) {
                     for (var i = 0 ; i < first.length ; i++) {
                         s += '<tr>';
                         s += '<td width="25%" valign="top">';
-                        s += "<div class='summary-item' id='country_" + first[i].code + "'>" + first[i].label + "</div>";
+                        s += "<a class='summary-item' id='country_" + first[i].code + "'>" + first[i].label + "</a>";
                         s += '</td>';
                         try {
                             s += '<td width="25%" valign="top">';
-                            s += "<div class='summary-item' id='country_" + second[i].code + "'>" + second[i].label + "</div>";
+                            s += "<a class='summary-item' id='country_" + second[i].code + "'>" + second[i].label + "</a>";
                             s += '</td>';
                         }catch (e) {	}
                         try {
                             s += '<td width="25%" valign="top">';
-                            s += "<div class='summary-item' id='country_" + third[i].code + "'>" + third[i].label + "</div>";
+                            s += "<a class='summary-item' id='country_" + third[i].code + "'>" + third[i].label + "</a>";
                             s += '</td>';
                         }catch (e) {	}
                         try {
                             s += '<td width="25%" valign="top">';
-                            s += "<div class='summary-item' id='country_" + fourth[i].code + "'>" + fourth[i].label + "</div>";
+                            s += "<a class='summary-item' id='country_" + fourth[i].code + "'>" + fourth[i].label + "</a>";
                             s += '</td>';
                         }catch (e) {	}
                         s += '</tr>';

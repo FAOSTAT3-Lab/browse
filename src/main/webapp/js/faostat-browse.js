@@ -45,7 +45,7 @@ if (!window.FAOSTATBrowse) {
                     success : function(response) {
                         response = (typeof response == 'string')? $.parseJSON(response) : response;
                         FAOSTATBrowse.CONFIG.FAOSTAT_DBMS_BROWSE_STRUCTURE = response;
-                        $('#container').load(FAOSTATBrowse.CONFIG.PREFIX + 'browse.html', function() {
+                        $('#container').load(FAOSTATBrowse.CONFIG.PREFIX + 'browse_bootstrap.html', function() {
                             /**
                              * Initiate multi-language
                              */
@@ -57,11 +57,11 @@ if (!window.FAOSTATBrowse) {
                                 language: I18NLang,
                                 callback: function() {
                                     // modify languages
-                                    document.getElementById('pageTitle').innerHTML = $.i18n.prop('_browse');
+                                    /*document.getElementById('pageTitle').innerHTML = $.i18n.prop('_browse');
                                     document.getElementById('domain_label').innerHTML = $.i18n.prop('_by_domain');
                                     document.getElementById('area_label').innerHTML = $.i18n.prop('_by_area');
                                     document.getElementById('rankings_label').innerHTML = $.i18n.prop('_rankings');
-
+                                     */
                                     FAOSTATBrowse.loadUI(FAOSTATBrowse.CONFIG.SECTION, FAOSTATBrowse.CONFIG.CODE)
                                 }
                             });
@@ -81,19 +81,19 @@ if (!window.FAOSTATBrowse) {
             switch (section) {
 
                 case 'area':
-                    radiobtn = document.getElementById('area').checked = true;
+                    //radiobtn = document.getElementById('area').checked = true;
                     BROWSE_STATS.showBrowseByCountryRegion();
                     FAOSTATBrowse.loadUI_byArea(section, code);
                     FAOSTATBrowse.section = 'AREA';
                     break;
                 case 'rankings':
-                    radiobtn = document.getElementById('rankings').checked = true;
+                    //radiobtn = document.getElementById('rankings').checked = true;
                     BROWSE_STATS.showBrowseRankings();
                     FAOSTATBrowse.loadUI_Rankings(section, code);
                     FAOSTATBrowse.section = 'RANKINGS';
                     break;
                 default:
-                    radiobtn = document.getElementById('domain').checked = true;
+                   // radiobtn = document.getElementById('domain').checked = true;
                     BROWSE_STATS.showBrowseByDomain();
                     FAOSTATBrowse.loadUI_ByDomain(section, code);
                     break;
@@ -107,7 +107,7 @@ if (!window.FAOSTATBrowse) {
             FAOSTATBrowse.upgradeURL(section, code);
 
             $('#' + FAOSTATBrowse.CONFIG.PLACEHOLDER).empty();
-            $('#' + FAOSTATBrowse.CONFIG.PLACEHOLDER).load(FAOSTATBrowse.CONFIG.PREFIX + 'browse_by_domain.html', function() {
+            $('#' + FAOSTATBrowse.CONFIG.PLACEHOLDER).load(FAOSTATBrowse.CONFIG.PREFIX + 'browse_by_domain_bootstrap.html', function() {
                 $("#selectorsHead").sticky({topSpacing:0});
                 FAOSTATBrowse.loadView(section, code, "TITLE");
             });

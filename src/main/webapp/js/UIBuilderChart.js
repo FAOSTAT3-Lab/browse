@@ -22,7 +22,7 @@ if (!window.UIBuilderChart) {
 
         appendChart : function(chart, lang) {
             var structure = CORE.replaceAll(this.objStructure, 'REPLACE', chart.object_parameters.renderTo);
-            structure = CORE.replaceAll(structure, '$_WIDTH',  chart.width );
+            //structure = CORE.replaceAll(structure, '$_WIDTH',  chart.width );
             structure = CORE.replaceAll(structure, '$_HEIGHT',  chart.height );
 
             $('#content_' + chart.object_parameters.renderTo).append(structure);
@@ -79,8 +79,9 @@ if (!window.UIBuilderChart) {
                         case 'FAOSTAT_DEFAULT_BAR_STACKED': UIBuilderChart.queryDBAndCreateChart_Bar_Stacked(chart, response); break;
                         case 'FAOSTAT_DEFAULT_DOUBLE_AXES_BAR': UIBuilderChart.queryDBAndCreateChart_MultipleAxes(chart, 'column', response); break;
                         case 'FAOSTAT_DEFAULT_DOUBLE_AXES_LINE': UIBuilderChart.queryDBAndCreateChart_MultipleAxes(chart, 'line', response); break;
-                        case 'FAOSTAT_DEFAULT_DOUBLE_AXES_TIMESERIES_BAR': UIBuilderChart.queryDBAndCreateChart_MultipleAxes_Timeseries(chart, 'column', response); break;
-                        case 'FAOSTAT_DEFAULT_DOUBLE_AXES_TIMESERIES_LINE': UIBuilderChart.queryDBAndCreateChart_MultipleAxes_Timeseries(chart, 'line', response); break;
+                        case 'FAOSTAT_DEFAULT_DOUBLE_AXES_TIMESERIES_BAR': UIBuilderChart.createChartTimeserie(chart, 'column', response); break;
+                        case 'FAOSTAT_DEFAULT_DOUBLE_AXES_TIMESERIES_LINE': UIBuilderChart.createChartTimeserie(chart, 'line', response); break;
+                        case 'FAOSTAT_DEFAULT_DOUBLE_AXES_TIMESERIES_ALL': UIBuilderChart.createChartTimeserie(chart, 'line', response);  break;
                         case 'FAOSTAT_DEFAULT_PIE': UIBuilderChart.queryDBAndCreateChart_Pie(chart, response); break;
                         case 'FAOSTAT_DEFAULT_GROWTHRATE': UIBuilderChart.queryDBAndCreateChart_GrowthRate(chart, response); break;
                     }
@@ -90,6 +91,163 @@ if (!window.UIBuilderChart) {
                 }
 
             });
+
+        },
+
+        /**
+         * @param chart Parameters stored in the JSON
+         * @param type 'column', 'line'
+         * @param response Data fetch through WDS
+         */
+        createChartTimeserie : function(chart, type, s) {
+            var data = [];
+            s = ( typeof s == 'string')? $.parseJSON(s): s;
+            for (var i=0; i < s.length; i++) {
+                data.push(s[i]);
+            }
+            if ( data.length <=0 ) {
+                UIUtils.noValuesFoundPanel( chart.object_parameters.renderTo)
+            }
+            else {
+                var series = [];
+                var yAxis = [];
+
+                /** Initiate variables */
+                var check = [];
+                var mus = [];
+                var ind = data[0][1];
+                var count = 0;
+                var maxLength = 0;
+                var maxLengthIND = data[0][1];
+
+                /** Re-shape data into 'vectors' */
+                var vectors = {};
+                vectors[ind] = {};
+                vectors[ind].dates = [];
+                vectors[ind].mus = [];
+                vectors[ind].values = new Hashtable();
+
+
+                /** Create a vector for each indicator */
+                for (var i = 0 ; i < data.length ; i++) {
+                    if (data[i][1] == ind) {
+                        count++;
+                        vectors[ind].dates.push(data[i][0]);
+                        vectors[ind].mus.push(data[i][3]);
+                        vectors[ind].values.put(data[i][0], data[i][2]);
+                    } else {
+                        check.push(count);
+                        if (count > maxLength) {
+                            maxLength = count;
+                            maxLengthIDX = check.length - 1;
+                            maxLengthIND = ind;
+                        }
+                        ind = data[i][1];
+                        vectors[ind] = [];
+                        vectors[ind].dates = [];
+                        vectors[ind].mus = [];
+                        vectors[ind].values = new Hashtable();
+                        count = 1;
+                        vectors[ind].dates.push(data[i][0]);
+                        vectors[ind].mus.push(data[i][3]);
+                        vectors[ind].values.put(data[i][0], data[i][2]);
+                    }
+                }
+                check.push(count);
+
+                /** Collect all the years */
+                var y = new Hashtable();
+                var yearsList = [];
+                for(key in vectors) {
+                    // console.log(key);
+                    for (var i = 0 ; i < vectors[key].dates.length ; i++) {
+                        //console.log(vectors[key]);
+                        // if the year still is not in the hashmap, add it
+                        if (y.get(vectors[key].dates[i]) == null ) {
+                            y.put(vectors[key].dates[i], vectors[key].dates[i]);
+                            yearsList.push(parseInt(vectors[key].dates[i]));
+                        }
+                    }
+                }
+
+                /** TODO: get min year, get max year. check if the years are always sorted**/
+                yearsList = yearsList.sort();
+                var years = []
+                for(var i=yearsList[0]; i <= yearsList[yearsList.length -1 ]; i++) {
+                    years.push(i.toString());
+                }
+
+                // check if it's just one year (X-axis), in that case force to bar chart (if it's not column/bar)
+                if ( years.length <= 1 && type != 'bar' && type != 'column') {
+                    $("#" + chart.object_parameters.renderTo + "_area").hide();
+                    $("#" + chart.object_parameters.renderTo + "_line").hide();
+                    $("#" + chart.object_parameters.renderTo + "_spline").hide();
+                    type = 'column';
+                }
+
+                /** TODO: Collect the MUs in the other cycle, Collect measurement units */
+                $.each(vectors, function(k, v) {
+                    if ($.inArray(vectors[k].mus[0], mus) < 0)
+                        mus.push(vectors[k].mus[0]);
+                });
+
+                $.each(vectors, function(k, v) {
+                    var s = {};
+                    // s.name = k;
+                    s.name = CompareUtils.replaceAll(k, '_', '<br>');
+                    s.type = type;
+                    s.yAxis = $.inArray(vectors[k].mus[0], mus);
+
+                    // data should be the same length of the years
+                    s.data = [];
+                    // if the data is contained in the hashmap
+                    for(var i =0; i < years.length; i++) {
+                        if (vectors[k].values.get(years[i]) != null ) {
+                            s.data.push(parseFloat(vectors[k].values.get(years[i])));
+                        }
+                        else
+                            s.data.push(null);
+                    }
+                    series.push(s);
+                });
+
+                /** Create a Y-Axis for each measurement unit */
+                for (var i = 0 ; i < mus.length ; i++) {
+                    var a = {};
+                    a.title = {};
+                    a.title.text = mus[i];
+                    a.title.style = {};
+                    a.title.style.color = FENIXCharts.COLORS[i];
+                    if (i > 0)
+                        a.opposite = true;
+                    a.labels = {};
+                    a.labels.style = {};
+                    a.labels.style.color = FENIXCharts.COLORS[i];
+                    yAxis.push(a);
+                }
+
+                /** Create chart */
+                var chart_payload = {};
+                chart_payload.engine = chart.object_parameters.engine;
+                //chart_payload.keyword = chart.object_parameters.keyword;
+                chart_payload.keyword = 'FAOSTAT_DEFAULT_DOUBLE_AXES_BAR';
+                chart_payload.renderTo = chart.object_parameters.renderTo;
+                chart_payload.categories = years;
+                chart_payload.title = '';
+                chart_payload.credits = chart.object_parameters.credits;
+                chart_payload.yaxis = {};
+                chart_payload.yaxis = yAxis;
+                chart_payload.xaxis = {};
+                if (chart.object_parameters.xaxis != null) {
+                    chart_payload.xaxis.rotation = chart.object_parameters.xaxis.rotation;
+                    chart_payload.xaxis.fontSize = chart.object_parameters.xaxis.fontSize;
+                }
+                // this is to avoid the empty point if the serie have scattered data
+                chart_payload.plotOptionsMarkerEnabled = true;
+
+                chart_payload.series = series;
+                FENIXCharts.plot(chart_payload);
+            }
 
         },
 
@@ -443,7 +601,7 @@ if (!window.UIBuilderChart) {
                 // TODO: make it better, quick fix for GHG Timeserie
                 if ( years.length > 30 ) {
                     chart_payload.xaxis.style = {};
-                    // chart_payload.xaxis.style.color = 'red'; 
+                    // chart_payload.xaxis.style.color = 'red';
                     // chart_payload.xaxis.style.fontSize = '5px';
                     chart_payload.xaxis.tickinterval = 2;
                 }

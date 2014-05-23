@@ -292,7 +292,7 @@
             F_subtitle : "$_DATE",
             date_default_label : "1990 - 2010",
             E_footnote : "<div style='color:#666'><i>Growth rate calculated based on the Least-Squares method</i></div>",
-            F_footnote : "<div style='color:#666'><i>Taux de croissance calculé avec  la méthode des moindres carrés</i></div>",
+            F_footnote : "<div style='color:#666'><i>Taux de croissance calculé avec la méthode des moindres carrés</i></div>",
             S_footnote : "<div style='color:#666'><i>Tasa de crecimiento calculada basándose en el método de mínimos cuadrados</i></div>",
             object_parameters : {
                 renderTo : "gr_1",

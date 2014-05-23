@@ -3,7 +3,7 @@ if (!window.FAOSTATBrowseUtils) {
 	window.FAOSTATBrowseUtils = {
 
         // TODO: use config file in the future
-        WIDTH_100: '428px',
+        /*WIDTH_100: '920px',
         WIDTH_66: '428px',
         WIDTH_50: '428px',
         WIDTH_33: '428px',
@@ -17,10 +17,26 @@ if (!window.FAOSTATBrowseUtils) {
         WIDTH_50_100: '428px',
         WIDTH_33_100: '316px',
         WIDTH_25_100: '296px',
-        WIDTH_20_100: '256px',
+        WIDTH_20_100: '256px', */
+
+        WIDTH_100: '12',
+        WIDTH_66:  '8',
+        WIDTH_50:  '6',
+        WIDTH_33:  '4',
+        WIDTH_25:  '2',
+        WIDTH_20:  '2',
+
+
+        // 100% configuration
+        WIDTH_100_100:'12',
+        WIDTH_66_100: '8',
+        WIDTH_50_100: '6',
+        WIDTH_33_100: '4',
+        WIDTH_25_100: '2',
+        WIDTH_20_100: '2',
 		
 		setObjWidth: function (obj) {
-			var width = "100%";
+            console.log(obj.width);
 			if ( obj.width != null ) {
                 if ( obj.width.toUpperCase().indexOf("$_WIDTH") > -1) {
 					switch(obj.width) {
@@ -40,9 +56,13 @@ if (!window.FAOSTATBrowseUtils) {
                         case "$_WIDTH_20_100": obj.width = FAOSTATBrowseUtils.WIDTH_20_100; break;
 					}
 				}
-				width = parseInt(obj.width.replace("px",""));
+				//width = parseInt(obj.width.replace("px",""));
 			}
-			return width;
+            else
+                obj.width = "12";
+
+            obj.width = parseInt(obj.width);
+            return obj.width;
 		}
 			
 	};

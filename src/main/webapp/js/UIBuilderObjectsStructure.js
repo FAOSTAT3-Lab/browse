@@ -10,7 +10,8 @@ if (!window.UIBuilderObjectsStructure) {
 
             var initialized = false;
             var currentSize = 0;
-            var contentWidth = width;
+            //var contentWidth = width;
+            var contentWidth = 12;
 
             // html structure
             var s = '';
@@ -20,44 +21,68 @@ if (!window.UIBuilderObjectsStructure) {
                 // dynamic id
                 objects[i].object_parameters.renderTo = 'obj_' + this.randomID();
 
+                // based on bootstrap
                 var objWidth = 0;
                 objWidth = FAOSTATBrowseUtils.setObjWidth(objects[i]);
+                console.log("OBJECT WIDTH " + objWidth );
                 currentSize = currentSize + objWidth;
 
                 // if it's empty open the table
                 if ( initialized == false ) {
-                    s += this.openTable();
+                    //s += this.openTable();
                     initialized = true;
                 }
-//				console.log(currentSize + " | " + contentWidth );
+				console.log(currentSize + " | " + contentWidth + " | " + objWidth );
                 // if doesn't go over the maximum width add it, otherwise create another table
-                if ( currentSize < (contentWidth - this.horizontalSpacing)) {
-
+                if ( currentSize <= contentWidth) {
                     if ( counter > 0 ) {
-                        s += this.addTD(objWidth, 'content_' + objects[i].object_parameters.renderTo, this.horizontalSpacing );
+                        s += this.addObj('content_' + objects[i].object_parameters.renderTo, objWidth, false );
                     }
                     else {
                         // add TD
-                        s += this.addTD(objWidth, 'content_' + objects[i].object_parameters.renderTo, null);
+                        s += this.addObj('content_' + objects[i].object_parameters.renderTo, objWidth, true);
                     }
                     counter++;
                 }
                 else {
                     // close the old table
-                    s += this.closeTable();
+                    s += this.closeRow();
                     // create a new table
-                    s += this.openTable();
+                    s += this.openRow();
                     // add the new TD
-                    s += this.addTD(objWidth, 'content_' + objects[i].object_parameters.renderTo);
+                    s += this.addObj('content_' + objects[i].object_parameters.renderTo, objWidth, false);
+
                     // initialize with the object dimension
                     currentSize = objWidth;
                 }
             }
             // close the old table
-            s += this.closeTable();
+            //s += this.closeTable();
             $('#content').append(s);
         },
-        openTable: function() {
+
+
+        addObj: function(id, value, addRow) {
+            var s = '';
+            if ( addRow ) {
+                console.log('openRow: ' + addRow);
+                s += this.openRow();
+            }
+
+            s += '<div id="' + id + '" class="col-lg-'+ value +'"></div>';
+
+            return s;
+        },
+        openRow: function() {
+
+            return '<div class="row">';
+        },
+        closeRow: function() {
+            return '</div>';
+        },
+
+
+        /*openTable: function() {
             var s = '<table style="margin-bottom:' + this.verticalSpacing +'px";><tr>';
             return s;
         },
@@ -75,7 +100,7 @@ if (!window.UIBuilderObjectsStructure) {
 
             s += '</td>';
             return s;
-        },
+        },  */
         randomID: function() {
             var randLetter = Math.random().toString(36).substring(7);
             return (randLetter + Date.now()).toLocaleLowerCase();

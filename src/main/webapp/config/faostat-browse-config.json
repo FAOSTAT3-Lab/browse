@@ -1,7 +1,7 @@
 {
-	"DATASOURCE":              "faostat2",
+	"DATASOURCE":              "faostatproddiss",
 
-    "BASE_URL_WDS":            "http://faostat3.fao.org/wds",
+    "BASE_URL_WDS":                 "http://faostat3.fao.org/wds",
 	"BASE_URL_R_MULTIPLEGROWTHRATE":              "http://faostat3.fao.org/r/rest/eval/multiplegrowthrate",
 	"BASE_URL_MAPS" :          "http://fenix.fao.org/maps",
 	"BASE_URL_BLETCHLEY":      "http://lprapp16.fao.org:5012/bletchley",
