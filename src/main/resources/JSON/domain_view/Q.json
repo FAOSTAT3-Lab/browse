@@ -220,10 +220,11 @@
 					{datatype : "DATE", column : "D.Year", operator : "IN", value : null, ins : [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012]},
 					{datatype : "DATE", column : "D.ElementListCode", operator : "IN", value : null, ins : [2510,2312,2413]},
 					{datatype : "DATE", column : "D.ItemCode", operator : "IN", value : null, ins : [1717]},
-					{datatype : "TEXT", column : "D.DomainCode", operator : "=", value : "QC", ins : []},
+                    {datatype : "TEXT",column : "D.DomainCode",operator : "IN",value : null,ins : ["'QC'","'QL'"]},
 					{datatype : "DATE", column : "D.AreaCode", operator : "=", value : "A.AreaCode", ins : []},
-					{datatype : "DATE", column : "D.ElementListCode", operator : "=", value : "E.ElementListCode", ins : []}
-				],
+					{datatype : "DATE", column : "D.ElementListCode", operator : "=", value : "E.ElementListCode", ins : []},
+                    {datatype : "DATE", column : "D.Value", operator : "<>", value : 0, ins : []}
+                ],
 				groupBys : [
 					{column : "A.AreaName_$LANG"},
 					{column : "E.ElementListName_$LANG"},
@@ -279,7 +280,8 @@
 					{datatype : "DATE",column : "D.ItemCode",operator : "IN",value : null,ins : [1717]},
 					{datatype : "TEXT",column : "D.DomainCode",operator : "IN",value : null,ins : ["'QC'","'QL'"]},
 					{datatype : "DATE",column : "D.YEAR",operator : "IN",value : null,ins : [2012,2011,2010,2009,2008,2007,2006,2005,2004,2003,2002,2001,2000]},
-					{datatype : "DATE",column : "D.AreaCode",operator : "=",value : "A.AreaCode",ins : []}
+					{datatype : "DATE",column : "D.AreaCode",operator : "=",value : "A.AreaCode",ins : []},
+                    {datatype : "DATE", column : "D.Value", operator : "<>", value : 0, ins : []}
 				],
 				groupBys : [
 					{column : "A.AreaName_$LANG"},

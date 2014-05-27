@@ -251,7 +251,8 @@
                     {datatype : "TEXT",column : "D.DomainCode",operator : "IN",value : null,ins : ["'OA'"]},
                     {datatype : "DATE",column : "D.YEAR",operator : "IN",value : null,ins : [2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000]},
                     {datatype : "DATE",column : "D.AreaCode",operator : "=",value : "A.AreaCode",ins : []},
-                    {datatype : "DATE",column : "D.ElementCode",operator : "=",value : "E.ElementCode",ins : []}
+                    {datatype : "DATE",column : "D.ElementCode",operator : "=",value : "E.ElementCode",ins : []},
+                    {datatype : "DATE", column : "D.Value", operator : "<>", value : 0, ins : []}
                 ],
                 groupBys : [
                     {column : "E.ElementName_$LANG"},

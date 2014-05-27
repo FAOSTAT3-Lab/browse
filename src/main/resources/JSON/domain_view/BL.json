@@ -341,7 +341,8 @@
 					{datatype : "DATE", column : "D.ItemCode", operator : "IN", value : null, ins : [2949]},
 					{datatype : "TEXT", column : "D.DomainCode", operator : "=", value : "BL", ins : []},
 					{datatype : "DATE", column : "D.AreaCode", operator : "=", value : "A.AreaCode", ins : []},
-					{datatype : "DATE", column : "D.ElementListCode", operator : "=", value : "E.ElementListCode", ins : []}
+					{datatype : "DATE", column : "D.ElementListCode", operator : "=", value : "E.ElementListCode", ins : []},
+                    {datatype : "DATE", column : "D.Value", operator : "<>", value : 0, ins : []}
 				],
 				groupBys : [
 					{column : "A.AreaName_$LANG"},
