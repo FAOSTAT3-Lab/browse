@@ -84,17 +84,6 @@
                 query : null,
                 frequency : null
             }
-        },
-        {
-            type : "dropdown_aggregation",
-            E_label : "Aggregation",
-            F_label : "Agrégation",
-            S_label : "Agregación",
-            E_help : "n.a.",
-            rest : "/faostat-browse-dbms/rest/nosql/get/aggregation",
-            keyword : "aggregation",
-            default_code : "AVG",
-            E_default_label : "Average"
         }
     ],
 	objects : [
@@ -186,9 +175,9 @@
             E_title : "Composition of global agricultural area",
             F_title : "Composition de la surface agricole mondiale",
             S_title : "Composición del área agrícola mundial",
-            E_subtitle : "$_AGG $_DATE",
-            S_subtitle : "$_AGG $_DATE",
-            F_subtitle : "$_AGG $_DATE",
+            E_subtitle : "$_DATE",
+            S_subtitle : "$_DATE",
+            F_subtitle : "$_DATE",
             date_default_label : "2000 - 2011",
             E_footnote : null,
             object_parameters : {

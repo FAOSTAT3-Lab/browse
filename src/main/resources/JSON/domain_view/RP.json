@@ -84,17 +84,6 @@
 				query : null,
 				frequency : null
 			}
-		},
-		{
-			type : "dropdown_aggregation",
-			E_label : "Aggregation",
-			F_label : "Agrégation",
-			S_label : "Agregación",
-			E_help : "n.a.",
-			rest : "/faostat-browse-dbms/rest/nosql/get/aggregation",
-			keyword : "aggregation", 
-			default_code : "AVG",
-			E_default_label : "Average"
 		}
 	],
 	objects : [
