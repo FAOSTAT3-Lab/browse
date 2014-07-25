@@ -98,83 +98,6 @@
 		}
 	],
 	objects : [
-		{
-			type : "chart",
-			datasource : "faostat",
-			css : "faostat",
-			height : "265px",
-			width : "$_WIDTH_100",
-			item_onchange : true,
-			element_onchange : true,
-			area_onchange : true,
-			year_onchange : true,
-			aggregation_onchange : true,
-			E_title : "Gross capital stock components in selected country",
-			F_title : "Composantes du stock de capital brut dans le pays sélectionné",
-			S_title : "Componentes de la reserva de capital bruta en el país seleccionado",
-			E_subtitle : "$_DATE",
-			S_subtitle : "$_DATE",
-			F_subtitle : "$_DATE",
-			date_default_label : "1992 - 2007",
-			E_footnote : null,
-			object_parameters : {
-				series_name : null,
-				engine : "highcharts",
-				keyword : "FAOSTAT_DEFAULT_DOUBLE_AXES_TIMESERIES_LINE",
-				renderTo : "chart_0",
-				title : "",
-				credits : "M = Million, k = Thousand",
-				yaxis : {
-					min : null,
-					max : null,
-					tickInterval : null,
-					title : null
-				},
-				xaxis : {
-					rotation : -45,
-					fontSize : '9px'
-				}
-			},			
-			export_parameters : {
-
-			},
-			sql : {
-				selects : [
-					{aggregation : "NONE", column : "D.Year", alias : "Year"},
-					{aggregation : "NONE", column : "I.ItemName_$LANG", alias : "Area"},
-					{aggregation : "AVG", column : "D.Value", alias : "Value"},
-					{aggregation : "NONE", column : "E.UnitName_$LANG", alias : "Unit"}
-				],
-				froms : [
-					{column : "Data", alias : "D"},
-					{column : "Area", alias : "A"},
-					{column : "Element", alias : "E"},
-                    {column : "Item", alias : "I"}
-				],
-				wheres : [
-					{datatype : "DATE", column : "D.ElementListCode", operator : "IN", value : null, ins : [6115]},
-					{datatype : "DATE", column : "D.ItemCode", operator : "IN", value : null, ins : [23006, 23007, 23008, 23009, 23010, 23011]},
-					{datatype : "DATE", column : "D.AreaCode", operator : "IN", value : null, ins : [2]},
-					{datatype : "DATE", column : "D.Year", operator : "IN", value : null, ins : [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007]},
-					{datatype : "TEXT", column : "D.DomainCode", operator : "IN", value : null, ins : ["'CS'"]},
-					{datatype : "DATE", column : "D.AreaCode", operator : "=", value : "A.AreaCode", ins : []},
-                    {datatype : "DATE", column : "D.ItemCode", operator : "=", value : "I.ItemCode", ins : []},
-					{datatype : "DATE", column : "D.ElementCode", operator : "=", value : "E.ElementCode", ins : []}
-				],
-				groupBys : [
-					{column : "D.Year"},
-					{column : "I.ItemName_$LANG"},
-					{column : "E.UnitName_$LANG"}
-				],
-				orderBys : [
-					{column : "I.ItemName_$LANG", direction : "ASC"},
-					{column : "D.Year", direction : "ASC"}
-				],
-				limit : null,
-				query : null,
-				frequency : null
-			}
-		},
         {
             type: "chart",
             datasource : "faostat",
@@ -183,7 +106,7 @@
             width : "$_WIDTH_100",
             item_onchange : true,
             element_onchange : true,
-            area_onchange : false,
+            area_onchange : true,
             year_onchange : true,
             aggregation_onchange : true,
             E_title : "Gross capital stock components shares in selected country",

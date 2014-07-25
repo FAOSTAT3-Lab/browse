@@ -134,9 +134,9 @@
             E_title : "Top 10 countries with highest prices for the selected commodity",
             F_title : "Top 10 des pays avec les prix les plus élevés pour le produit sélectionné",
             S_title : "10 principales países con los mayores precios para el producto seleccionado",
-            E_subtitle : "$_AGG $_DATE",
-            S_subtitle : "$_AGG $_DATE",
-            F_subtitle : "$_AGG $_DATE",
+            E_subtitle : "$_DATE",
+            S_subtitle : "$_DATE",
+            F_subtitle : "$_DATE",
             date_default_label : "1999 - 2011",
             E_footnote : null,
             object_parameters : {
