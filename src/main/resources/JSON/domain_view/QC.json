@@ -103,7 +103,7 @@
             "S_label": "Desde el Año",
             "E_help": "n.a.",
             "keyword": "fromyear",
-            "default_code": 1992,
+            "default_code": 1993,
             "blacklist": [],
             "start_date": null,
             "end_date": null,
@@ -148,7 +148,7 @@
             "S_label": "Hasta el año",
             "E_help": "n.a.",
             "keyword": "toyear",
-            "default_code": 2012,
+            "default_code": 2013,
             "blacklist": [],
             "start_date": null,
             "end_date": null,
@@ -217,7 +217,7 @@
             "E_subtitle": "$_AGG $_DATE",
             "S_subtitle": "$_AGG $_DATE",
             "F_subtitle": "$_AGG $_DATE",
-            "date_default_label": "1992 - 2012",
+            "date_default_label": "1993 - 2013",
             "E_footnote": "<div style='color:#666'><i>The designations employed and the presentation of material in the maps do not imply the expression of any opinion whatsoever on the part of FAO concerning the legal or constitutional status of any country, territory or sea area, or concerning the delimitation of frontiers. South Sudan declared its independence on July 9, 2011. Due to data availability, the assessment presented in the map for Sudan and South Sudan reflects the situation up to 2011 for the former Sudan.</i></div>",
             "F_footnote": "<div style='color:#666'><i>Les appellations employées et la présentation des données sur la carte n'impliquent de la part de la FAO aucune prise de position quant au statut juridique ou constitutionnel des pays, territoires ou zones maritimes, ni quant au tracé de leurs frontières ou limites. Le Soudan du Sud a déclaré son indépendance le 9 Juillet 2011. Pour des raisons de disponibilité des données, l’évaluation montrée sur  la carte à la fois pour le Soudan et le Soudan du Sud, refléte la situation comme elle l’etait jusqu’en 2011 pour l’ex Soudan.</i></div>",
             "S_footnote": "<div style='color:#666'><i>Las denominaciones empleadas en los mapas y la forma en que aparecen presentados los datos no implican, por parte de la FAO, juicio alguno sobre la condición jurídica de países, territorios o zonas marítimas, ni respecto de la delimitación de sus fronteras. Sudán del Sur declaró su independencia el 9 de julio de 2011. Debido a la disponibilidad de datos, la evaluación presentada en el mapa para Sudán y Sudán del Sur refleja la situación hasta el año 2011 para la antigua Sudán.</i></div>",
@@ -292,6 +292,7 @@
                         "operator": "IN",
                         "value": null,
                         "ins": [
+                            2013,
                             2012,
                             2011,
                             2010,
@@ -311,8 +312,7 @@
                             1996,
                             1995,
                             1994,
-                            1993,
-                            1992
+                            1993
                         ]
                     },
                     {
@@ -381,7 +381,7 @@
             "E_subtitle": "$_DATE",
             "S_subtitle": "$_DATE",
             "F_subtitle": "$_DATE",
-            "date_default_label": "1992 - 2012",
+            "date_default_label": "1993 - 2013",
             "E_footnote": null,
             "object_parameters": {
                 "series_name": null,
@@ -473,7 +473,6 @@
                         "operator": "IN",
                         "value": null,
                         "ins": [
-                            1992,
                             1993,
                             1994,
                             1995,
@@ -493,7 +492,8 @@
                             2009,
                             2010,
                             2011,
-                            2012
+                            2012,
+                            2013
                         ]
                     },
                     {
@@ -561,7 +561,7 @@
             "E_subtitle": "$_AGG $_DATE",
             "S_subtitle": "$_AGG $_DATE",
             "F_subtitle": "$_AGG $_DATE",
-            "date_default_label": "1992 - 2012",
+            "date_default_label": "1993 - 2013",
             "E_footnote": null,
             "object_parameters": {
                 "series_name": null,
@@ -651,7 +651,6 @@
                         "operator": "IN",
                         "value": null,
                         "ins": [
-                            1992,
                             1993,
                             1994,
                             1995,
@@ -671,7 +670,8 @@
                             2009,
                             2010,
                             2011,
-                            2012
+                            2012,
+                            2013
                         ]
                     },
                     {
@@ -716,7 +716,7 @@
             "E_subtitle": "$_AGG $_DATE",
             "S_subtitle": "$_AGG $_DATE",
             "F_subtitle": "$_AGG $_DATE",
-            "date_default_label": "1992 - 2012",
+            "date_default_label": "1993 - 2013",
             "E_footnote": null,
             "object_parameters": {
                 "series_name": "Production",
@@ -804,7 +804,6 @@
                         "operator": "IN",
                         "value": null,
                         "ins": [
-                            1992,
                             1993,
                             1994,
                             1995,
@@ -824,7 +823,8 @@
                             2009,
                             2010,
                             2011,
-                            2012
+                            2012,
+                            2013
                         ]
                     },
                     {
@@ -888,7 +888,7 @@
             "E_subtitle": "$_AGG $_DATE",
             "S_subtitle": "$_AGG $_DATE",
             "F_subtitle": "$_AGG $_DATE",
-            "date_default_label": "1992 - 2012",
+            "date_default_label": "1993 - 2013",
             "E_footnote": null,
             "object_parameters": {
                 "series_name": null,
@@ -1008,7 +1008,6 @@
                         "operator": "IN",
                         "value": null,
                         "ins": [
-                            1992,
                             1993,
                             1994,
                             1995,
@@ -1028,7 +1027,8 @@
                             2009,
                             2010,
                             2011,
-                            2012
+                            2012,
+                            2013
                         ]
                     }
                 ],
@@ -1071,7 +1071,7 @@
             "E_subtitle": "$_AGG $_DATE",
             "S_subtitle": "$_AGG $_DATE",
             "F_subtitle": "$_AGG $_DATE",
-            "date_default_label": "1992 - 2012",
+            "date_default_label": "1993 - 2013",
             "E_footnote": null,
             "object_parameters": {
                 "series_name": null,
@@ -1191,7 +1191,6 @@
                         "operator": "IN",
                         "value": null,
                         "ins": [
-                            1992,
                             1993,
                             1994,
                             1995,
@@ -1211,7 +1210,8 @@
                             2009,
                             2010,
                             2011,
-                            2012
+                            2012,
+                            2013
                         ]
                     }
                 ],
@@ -1254,7 +1254,7 @@
             "E_subtitle": "$_AGG $_DATE",
             "S_subtitle": "$_AGG $_DATE",
             "F_subtitle": "$_AGG $_DATE",
-            "date_default_label": "1992 - 2012",
+            "date_default_label": "1993 - 2013",
             "E_footnote": null,
             "object_parameters": {
                 "series_name": null,
@@ -1374,7 +1374,6 @@
                         "operator": "IN",
                         "value": null,
                         "ins": [
-                            1992,
                             1993,
                             1994,
                             1995,
@@ -1394,7 +1393,8 @@
                             2009,
                             2010,
                             2011,
-                            2012
+                            2012,
+                            2013
                         ]
                     }
                 ],

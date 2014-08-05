@@ -81,7 +81,7 @@
 					{column : "Domain",alias : "D"}
 				],
 				wheres : [
-					{datatype : "TEXT",column : "D.DomainCode",operator : "=",value : "QC",ins : []}
+					{datatype : "TEXT",column : "D.DomainCode",operator : "=",value : "QD",ins : []}
 				],
 				limit : null,
 				query : null,
