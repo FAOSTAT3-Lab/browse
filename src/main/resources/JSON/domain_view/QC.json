@@ -552,6 +552,262 @@
             "width": "$_WIDTH_100",
             "item_onchange": true,
             "element_onchange": true,
+            "area_onchange": true,
+            "year_onchange": true,
+            "aggregation_onchange": true,
+            "E_title": "Yield of commodity in selected country",
+            "F_title": "Rendement de produits dans le pays sélectionné",
+            "S_title": "Rendimiento de producto en el país seleccionado",
+            "E_subtitle": "$_DATE",
+            "S_subtitle": "$_DATE",
+            "F_subtitle": "$_DATE",
+            "date_default_label": "1993 - 2013",
+            "E_footnote": null,
+            "object_parameters": {
+                "series_name": null,
+                "engine": "highcharts",
+                "keyword": "FAOSTAT_DEFAULT_DOUBLE_AXES_TIMESERIES_LINE",
+                "renderTo": "chart_0",
+                "title": "",
+                "credits": "M = Million, k = Thousand",
+                "yaxis": {
+                    "min": null,
+                    "max": null,
+                    "tickInterval": null,
+                    "title": null
+                },
+                "xaxis": {
+                    "rotation": -45,
+                    "fontSize": "9px"
+                }
+            },
+            "export_parameters": {},
+            "sql": {
+                "selects": [
+                    {
+                        "aggregation": "NONE",
+                        "column": "D.Year",
+                        "alias": "Year"
+                    },
+                    {
+                        "aggregation": "NONE",
+                        "column": "A.AreaName_$LANG",
+                        "alias": "Area"
+                    },
+                    {
+                        "aggregation": "AVG",
+                        "column": "D.Value",
+                        "alias": "Value"
+                    },
+                    {
+                        "aggregation": "NONE",
+                        "column": "E.UnitName_$LANG",
+                        "alias": "Unit"
+                    }
+                ],
+                "froms": [
+                    {
+                        "column": "Data",
+                        "alias": "D"
+                    },
+                    {
+                        "column": "Area",
+                        "alias": "A"
+                    },
+                    {
+                        "column": "Element",
+                        "alias": "E"
+                    }
+                ],
+                "wheres": [
+                    {
+                        "datatype": "DATE",
+                        "column": "D.ElementListCode",
+                        "operator": "IN",
+                        "value": null,
+                        "ins": [
+                            2413
+                        ]
+                    },
+                    {
+                        "datatype": "DATE",
+                        "column": "D.ItemCode",
+                        "operator": "IN",
+                        "value": null,
+                        "ins": [
+                            27
+                        ]
+                    },
+                    {
+                        "datatype": "DATE",
+                        "column": "D.AreaCode",
+                        "operator": "IN",
+                        "value": null,
+                        "ins": [
+                            2
+                        ]
+                    },
+                    {
+                        "datatype": "DATE",
+                        "column": "D.Year",
+                        "operator": "IN",
+                        "value": null,
+                        "ins": [
+                            1993,
+                            1994,
+                            1995,
+                            1996,
+                            1997,
+                            1998,
+                            1999,
+                            2000,
+                            2001,
+                            2002,
+                            2003,
+                            2004,
+                            2005,
+                            2006,
+                            2007,
+                            2008,
+                            2009,
+                            2010,
+                            2011,
+                            2012,
+                            2013
+                        ]
+                    },
+                    {
+                        "datatype": "TEXT",
+                        "column": "D.DomainCode",
+                        "operator": "=",
+                        "value": "QC",
+                        "ins": []
+                    },
+                    {
+                        "datatype": "DATE",
+                        "column": "D.AreaCode",
+                        "operator": "=",
+                        "value": "A.AreaCode",
+                        "ins": []
+                    },
+                    {
+                        "datatype": "DATE",
+                        "column": "D.ElementCode",
+                        "operator": "=",
+                        "value": "E.ElementCode",
+                        "ins": []
+                    }
+                ],
+                "groupBys": [
+                    {
+                        "column": "D.Year"
+                    },
+                    {
+                        "column": "A.AreaName_$LANG"
+                    },
+                    {
+                        "column": "E.UnitName_$LANG"
+                    }
+                ],
+                "orderBys": [
+                    {
+                        "column": "A.AreaName_$LANG",
+                        "direction": "ASC"
+                    },
+                    {
+                        "column": "D.Year",
+                        "direction": "ASC"
+                    }
+                ],
+                "limit": null,
+                "query": null,
+                "frequency": null
+            }
+        },
+        {
+            type : "chart",
+            datasource : "faostat",
+            css : "faostat",
+            height : "220px",
+            width : "$_WIDTH_100",
+            item_onchange : true,
+            element_onchange : false,
+            area_onchange : true,
+            year_onchange : true,
+            aggregation_onchange : false,
+            E_title : "Annual growth rates by selected country",
+            S_title : "Tasas anuales de crecimiento en el país seleccionado",
+            F_title : "Taux de croissance annuel dans le pays sélectionné",
+            subtitle : "",
+            E_subtitle : "$_DATE",
+            S_subtitle : "$_DATE",
+            F_subtitle : "$_DATE",
+            date_default_label : "2003 - 2013",
+            E_footnote : "<div style='color:#666'><i>Growth rate calculated based on the Least-Squares method</i></div>",
+            F_footnote : "<div style='color:#666'><i>Taux de croissance calculé avec  la méthode des moindres carrés</i></div>",
+            S_footnote : "<div style='color:#666'><i>Tasa de crecimiento calculada basándose en el método de mínimos cuadrados</i></div>",
+            object_parameters : {
+                series_name : "Production",
+                engine : "highcharts",
+                keyword : "FAOSTAT_DEFAULT_GROWTHRATE",
+                renderTo : "gr_0",
+                title : "",
+                credits : "",
+                yaxis : {
+                    min : null,
+                    max : null,
+                    tickInterval : null,
+                    title : "% Annual Growth Rate"
+                }
+            },
+            export_parameters : {
+
+            },
+            sql : {
+                selects : [
+                    {aggregation : "NONE", column : "A.AreaName_$LANG", alias : "Area"},
+                    {aggregation : "NONE", column : "E.ElementListName_$LANG", alias : "Element"},
+                    {aggregation : "NONE", column : "D.Year", alias : "Year"},
+                    {aggregation : "AVG", column : "D.Value", alias : "Value"}
+                ],
+                froms : [
+                    {column : "Data", alias : "D"},
+                    {column : "Area", alias : "A"},
+                    {column : "Element", alias : "E"}
+                ],
+                wheres : [
+                    {datatype : "DATE", column : "D.AreaCode", operator : "IN", value : null, ins : [2]},
+                    {datatype : "DATE", column : "D.Year", operator : "IN", value : null, ins : [2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013]},
+                    {datatype : "DATE", column : "D.ElementListCode", operator : "IN", value : null, ins : [2510,2312,2413]},
+                    {datatype : "DATE", column : "D.ItemCode", operator : "IN", value : null, ins : [1717]},
+                    {datatype : "TEXT",column : "D.DomainCode",operator : "IN",value : null,ins : ["'QC'"]},
+                    {datatype : "DATE", column : "D.AreaCode", operator : "=", value : "A.AreaCode", ins : []},
+                    {datatype : "DATE", column : "D.ElementListCode", operator : "=", value : "E.ElementListCode", ins : []},
+                    {datatype : "DATE", column : "D.Value", operator : "<>", value : 0, ins : []}
+                ],
+                groupBys : [
+                    {column : "A.AreaName_$LANG"},
+                    {column : "E.ElementListName_$LANG"},
+                    {column : "D.Year"}
+                ],
+                orderBys : [
+                    {column : "A.AreaName_$LANG", direction : "ASC"},
+                    {column : "E.ElementListName_$LANG", direction : "ASC"},
+                    {column : "D.Year", direction : "ASC"}
+                ],
+                limit : null,
+                query : null,
+                frequency : null
+            }
+        },
+        {
+            "type": "chart",
+            "datasource": "faostat",
+            "css": "faostat",
+            "height": "265px",
+            "width": "$_WIDTH_100",
+            "item_onchange": true,
+            "element_onchange": true,
             "area_onchange": false,
             "year_onchange": true,
             "aggregation_onchange": true,
